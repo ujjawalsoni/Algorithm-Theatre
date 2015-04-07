@@ -1,6 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -18,20 +19,39 @@ import javax.swing.WindowConstants;
 
 public class GUI
 {
-	JFrame mainFrame;
-	Container mainPane;
-	JPanel centrePanel;
-	JPanel leftPanel;
-	JPanel rightPanel;
-	JPanel topPanel;
-	JPanel bottomPanel;
-	JButton topLeft;
-	JButton leftBottom;
-	JButton rightMiddle;
-	JButton rightBottom;
-	JLabel mainLabel;
-	JLabel codeTraceLabel;
-	JLabel statusLabel;
+	/*
+	 * 
+	 */
+	
+	private JFrame mainFrame;
+	private Container mainPane;
+
+	private JPanel centrePanel;
+	private JPanel leftPanel;
+	private JPanel rightPanel;
+	private JPanel topPanel;
+	private JPanel bottomPanel;
+	
+	private JButton topLeft;
+	private JButton leftBottom;
+	private JButton rightMiddle;
+	private JButton rightBottom;
+	private JButton developers;
+
+	private JLabel mainLabel;
+//	private JPanel centreBottomPanel;
+	private JLabel codeTraceLabel;
+	private JLabel statusLabel;
+	
+	private JPanel actionPanel;
+	private JButton createList;
+	private JButton sortList;
+
+	private ImageIcon rightBlackArrow;
+	private ImageIcon rightWhiteArrow;
+	private ImageIcon leftBlackArrow;
+	private ImageIcon leftWhiteArrow;
+	
 
 	public GUI ()
 	{
@@ -40,6 +60,11 @@ public class GUI
 	
 	public void initialize ()
 	{
+		rightBlackArrow = new ImageIcon ("Images/arrow_black_right.png");
+		rightWhiteArrow = new ImageIcon ("Images/arrow_white_right.png");
+		leftBlackArrow = new ImageIcon ("Images/arrow_black_left.png");
+		leftWhiteArrow = new ImageIcon ("Images/arrow_white_left.png");
+		
 		mainFrame = new JFrame ("Algorithm Theatre");
 		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -78,7 +103,7 @@ public class GUI
 		mainPane.add(bottomPanel, BorderLayout.PAGE_END);
 
 		leftBottom = new JButton();
-		leftBottom.setIcon(new ImageIcon("arrow_white_right.png"));
+		leftBottom.setIcon(rightWhiteArrow);
 		leftBottom.setBackground(Color.cyan);
 		leftBottom.setPreferredSize(new Dimension(40,65));
 		leftBottom.setBorder(null);
@@ -87,11 +112,11 @@ public class GUI
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.anchor = GridBagConstraints.PAGE_END;
 		gbc.gridx = 0;	gbc.gridy = 0;	gbc.weighty=1.0;
-		gbc.insets = new Insets(0,0,10,0);
+		gbc.insets = new Insets(0,0,1,0);
 		leftPanel.add (leftBottom, gbc);
 
 		rightMiddle = new JButton();
-		rightMiddle.setIcon(new ImageIcon("arrow_white_left.png"));
+		rightMiddle.setIcon(leftWhiteArrow);
 		rightMiddle.setBackground(Color.orange);
 		rightMiddle.setPreferredSize(new Dimension(40,65));
 		rightMiddle.setFocusPainted(false);
@@ -107,9 +132,15 @@ public class GUI
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (statusLabel.isVisible())
+				{
+					rightMiddle.setIcon(leftBlackArrow);
 					statusLabel.setVisible (false);
+				}
 				else
+				{
+					rightMiddle.setIcon(rightBlackArrow);
 					statusLabel.setVisible (true);
+				}
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {}
@@ -123,15 +154,15 @@ public class GUI
 		});
 		
 		rightBottom = new JButton();
-		rightBottom.setIcon(new ImageIcon("arrow_white_left.png"));
-		rightBottom.setBackground(Color.red);
+		rightBottom.setIcon(leftBlackArrow);
+		rightBottom.setBackground(Color.yellow);
 		rightBottom.setPreferredSize(new Dimension(40,170));
 		rightBottom.setFocusPainted(false);
 		rightBottom.setBorder(null);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.anchor = GridBagConstraints.PAGE_END;
 		gbc.gridx = 0;	gbc.gridy = 1;	gbc.weighty=1.0;
-		gbc.insets = new Insets(0,0,0,0);
+		gbc.insets = new Insets(0,0,1,0);
 		rightPanel.add (rightBottom, gbc);
 
 		rightBottom.addMouseListener(new MouseListener()
@@ -139,9 +170,15 @@ public class GUI
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (codeTraceLabel.isVisible())
+				{
+					rightBottom.setIcon(leftBlackArrow);
 					codeTraceLabel.setVisible (false);
+				}
 				else
+				{
+					rightBottom.setIcon(rightBlackArrow);
 					codeTraceLabel.setVisible (true);
+				}
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {}
@@ -153,10 +190,10 @@ public class GUI
 			public void mouseReleased(MouseEvent e) {}
 
 		});
-
-		mainLabel = new JLabel("This it to test the label");
+		
+		mainLabel = new JLabel();
 		mainLabel.setOpaque(true);
-		mainLabel.setBackground(Color.lightGray);
+		mainLabel.setBackground(Color.WHITE);
 		mainLabel.setPreferredSize(new Dimension(1200,380));
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.anchor = GridBagConstraints.PAGE_START;
@@ -164,30 +201,58 @@ public class GUI
 		gbc.insets = new Insets(0,0,0,0);
 		centrePanel.add (mainLabel, gbc);
 
-		statusLabel = new JLabel("This it to test the label");
+		statusLabel = new JLabel();
 		statusLabel.setOpaque(true);
 		statusLabel.setBackground(Color.orange);
 		statusLabel.setPreferredSize(new Dimension(270,65));
-		gbc.anchor = GridBagConstraints.CENTER;
-		gbc.gridx = 0;	gbc.gridy = 1;
-		gbc.insets = new Insets(40,800,0,-8);
+		statusLabel.setVisible(false);
+		gbc.anchor = GridBagConstraints.NORTH;
+		gbc.gridx = 0;	gbc.gridy = 0;
+		gbc.insets = new Insets(425,800,0,-8);
 		centrePanel.add (statusLabel, gbc);
 		
 		codeTraceLabel = new JLabel("This it to test the label");
 		codeTraceLabel.setOpaque(true);
-		codeTraceLabel.setBackground(Color.red);
+		codeTraceLabel.setBackground(Color.yellow);
+//		codeTraceLabel.setForeground(Color.white);
 		codeTraceLabel.setPreferredSize(new Dimension(270,170));
-		gbc.anchor = GridBagConstraints.PAGE_END;
+		codeTraceLabel.setVisible(false);
+		gbc.anchor = GridBagConstraints.SOUTH;
 		gbc.gridx = 0;	gbc.gridy = 2;
 		gbc.weighty=1.0;
 		gbc.insets = new Insets(0,800,1,-8);
 		centrePanel.add (codeTraceLabel, gbc);
 		
+		developers = new JButton("Developers");
+		developers.setPreferredSize(new Dimension(100,30));
+		developers.setFocusPainted(false);
+		developers.setBorder(null);
+		developers.setBackground(Color.black);
+		developers.setForeground(Color.white);
+		developers.setContentAreaFilled(false);
+		gbc.gridx = 0;	gbc.gridy = 0;	gbc.weightx = 1.0;
+		gbc.insets = new Insets(0,0,0,0);
+		bottomPanel.add (developers, gbc);
+		developers.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
-
 		mainFrame.pack();
 	    mainFrame.setVisible(true);
 
 	}
+
 	
+	public void setStatusLabel(String content)
+	{
+		statusLabel.setText(convertToMultiline(content));
+	}
+	
+	public void setCodeTraceLabel (String content)
+	{
+		codeTraceLabel.setText(convertToMultiline(content));
+	}
+
+	private static String convertToMultiline(String original)
+	{	
+	    return "<html>" + original.replaceAll("\n", "<br>");
+	}
 }
