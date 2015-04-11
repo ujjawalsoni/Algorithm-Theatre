@@ -11,11 +11,12 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
-
 public class Testing
 {
+	
 	public static void main(String[] args)
 	{
+		final int CHANGEX = 1;
 		final ArrayList<Integer> list = new ArrayList<Integer>();
 		list.add(100);
 		list.add(2);
@@ -25,9 +26,9 @@ public class Testing
 		list.add(97);
 		list.add(54);
 		list.add(76);
-		list.add(34);
+		list.add(19);
 		list.add(44);
-		list.add(87);
+		list.add(67);
 		list.add(34);
 		
 		SwingUtilities.invokeLater(new Runnable()
@@ -53,8 +54,10 @@ public class Testing
 
 class MyPanel extends JPanel implements ActionListener
 {
+	private static final int CHANGEX = 1;
 	private static final int TIMER_SPEED = 100;
 	ArrayRectangle box;
+	static int flag;
 	
 	public MyPanel(ArrayList<Integer> list)
 	{
@@ -64,22 +67,175 @@ class MyPanel extends JPanel implements ActionListener
 		box.setBaseY(200);
 		box.initializeRectangle(list);
 		this.paintBox();
-		Timer timer = new Timer(25, this);
-		timer.addActionListener(new ActionListener()
+		flag = 0;
+		
+		System.out.println("\nPass 0\n");
+		for (int j = 0; j < box.getArrayRectangle().length; j++)
 		{
+			System.out.println("data " + box.getRectangle(j).getData() + " Index " + box.getRectangle(j).getHeight());
+		}
+		final Timer timer = new Timer(5, this);
+		
+		ActionListener action = new ActionListener()
+		{
+			// for running the code flag part initial conditions 
+			
+			// i represents the index of the current rectangle
+			int i = 1;
+			
+			//stores the index of the first rectangle whose data is less of equal to the current rectangle 
+			int k = 0;
+			
+			// varies from k + 1 to i - 1 (used for shifting all rectangles in this range)
+			int index = 0;
+			
+			// Stores how much a the current rectangle has moved down
+			int currentDownCount = 0;
+			
+			// counts how much a rectangle[index] has moved to the right (while shifting the rectangles) 	
+			int indexRightCount = 0;
+			
+			// counts how much a current rectangle has moved left
+			int currentLeftCount = 0;
+			
+			//  counts how much a current rectangle has moved up
+			int currentUpCount = 0;
+			
+			int codeFlag = 1;
+			int rightFlag = 0;
+			int rightBlockFlag = 0;
+			int downFlag = 0;
+			int upFlag = 0;
+			int LeftMainFlag = 0;
+			int width = 20;
+			
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				box.addOffsetRectangel(2, 0, 1);
-				paintBox();
+				// step zero check whether to continue the algorithm or not
+				if (i == 12)
+					timer.stop();
+				
+				// Step one find a suitable index where to place the current rectangle
+				else if (codeFlag == 1)
+				{
+					Rectangle currRect = box.getRectangle(i);
+					Rectangle scanRect;
+					for (k = i - 1; k >= 0; k--)
+					{
+						scanRect = box.getRectangle(k);
+						if (scanRect.getData() > currRect.getData())
+							continue;
+						else
+						{
+							// getting the index of first rectangle to move to the left
+							index = i - 1;
+							break;
+						}
+					}
+					codeFlag = 0;
+					downFlag = 1;
+					currentDownCount = 0;
+				}
+				
+				else if (downFlag == 1)
+				{
+					box.addOffsetRectangel(i, 0, 1);
+					paintBox();
+					currentDownCount++;
+					if (currentDownCount >= 100)
+					{
+						downFlag = 0;
+						rightBlockFlag = 1;
+						indexRightCount = 0;
+					}
+				}
+				/////////////////////////////////////////////
+				else if (rightBlockFlag == 1)
+				{
+					if (index <= k)
+					{
+						rightBlockFlag = 0;
+						LeftMainFlag = 1;
+						currentLeftCount = 0;
+					}
+					else
+					{
+						rightFlag = 1;
+						rightBlockFlag = 0;
+						indexRightCount = 0;
+					}
+				}
+				
+				else if (rightFlag == 1)
+				{
+					box.addOffsetRectangel(index, 1, 0);
+					paintBox();
+					indexRightCount++;
+					
+					if (indexRightCount >= width)
+					{
+						rightFlag = 0;
+						rightBlockFlag = 1;
+						index--;
+					}
+				}
+				//////////////////////////////////////////
+				else if (LeftMainFlag == 1)
+				{
+					box.addOffsetRectangel(i, -1, 0);
+					currentLeftCount++;
+					paintBox();
+					if (currentLeftCount >= width * (i - 1 - k))
+					{
+						LeftMainFlag = 0;
+						upFlag = 1;
+						currentUpCount = 0;
+					}
+				}
+				
+				else if (upFlag == 1)
+				{
+					box.addOffsetRectangel(i, 0, -1);
+					currentUpCount++;
+					paintBox();
+					if (currentUpCount >= 100)
+					{
+						
+						Rectangle currRect = box.getRectangle(i);
+						System.out.println("\n\ni value " + box.getRectangle(i).getData());
+						Rectangle scanRect;
+						int t;
+						for (t = i - 1; t >= 0; t--)
+						{
+							scanRect = box.getRectangle(t);
+							System.out.println("t value " + scanRect.getData());
+							
+							if (scanRect.getData() > currRect.getData())
+								box.setRectangle(box.getRectangle(t), t + 1);
+							else
+							{
+								break;
+							}
+						}
+						box.setRectangle(currRect, t + 1);
+						System.out.println("\nPass " + i + "\n");
+						for (int j = 0; j < box.getArrayRectangle().length; j++)
+						{
+							System.out.println("data " + box.getRectangle(j).getData() + " Index " + j);
+						}
+						upFlag = 0;
+						codeFlag = 1;
+						i++;
+					}
+				}
 			}
-			
-		});
+		};
 		
-		for (int i = 0; i < 10; i++)
-		{
-			timer.start();
-		}
+		timer.addActionListener(action);
+		timer.start();
+		//timer1.start();
+		
 	}
 	
 	private void paintBox()
