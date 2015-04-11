@@ -182,6 +182,14 @@ class ArrayRectangle
 		number = array.length;
 	}
 	
+	public void setRectangle(Rectangle rect, int index)
+	{
+		if (index < 0 || index >= this.getNumber() || rect == null)
+			return;
+		
+		rectArray[index] = rect;
+	}
+	
 	/******* other functions *************************/
 	
 	/**
