@@ -7,9 +7,9 @@ import javax.swing.Timer;
 public class SortingFunctions extends MyPanel
 {
 	
-	private static final int TIMER_SPEED = 5;
-	private static final int XCHANGE = 1;
-	private static final int YCHANGE = 1;
+	private static final int TIMER_SPEED = 20;
+	private static final int XCHANGE = 4;
+	private static final int YCHANGE = 4;
 	private static final int DOWN = 200;
 	
 	public SortingFunctions(ArrayList<Integer> list)
@@ -126,6 +126,7 @@ public class SortingFunctions extends MyPanel
 					indexRightCount += XCHANGE;
 					if (indexRightCount >= width)
 					{
+						System.out.println("Shifting the currentBlock Right Done");
 						int excess = indexRightCount - width;
 						box.addOffsetRectangel(j, -excess, 0);
 						paintBox();
@@ -144,7 +145,7 @@ public class SortingFunctions extends MyPanel
 					if (currentLeftCount >= width)
 					{
 						int excess = currentLeftCount - width;
-						box.addOffsetRectangel(j, excess, 0);
+						box.addOffsetRectangel(j + 1, excess, 0);
 						paintBox();
 						leftFlag = 0;
 						upFlag = 1;
@@ -601,7 +602,7 @@ public class SortingFunctions extends MyPanel
 							rightEnd = leftStart + 2 * currentSize - 1;
 						timer.stop();
 						System.out.println("Timer1 Stop");
-						//merge(leftStart, mid, rightEnd, timer);
+						
 						leftStart += 2 * currentSize;
 					}
 				}
@@ -614,6 +615,9 @@ public class SortingFunctions extends MyPanel
 	public void merge(final int l, final int m, final int r)
 	{
 		final Timer timer = new Timer(TIMER_SPEED, this);
+		final int width = super.getRectangleSpace();
+		final int size = super.box.getArrayRectangle().length;
+		
 		ActionListener action = new ActionListener()
 		{
 			int i = 0;
@@ -629,7 +633,7 @@ public class SortingFunctions extends MyPanel
 			int downFlag = 0;
 			int upFlag = 0;
 			int LeftMainFlag = 0;
-			int width = 25;
+			int x = 0;
 			
 			//TODO the stopping condition is wrong 
 			@Override
@@ -637,13 +641,14 @@ public class SortingFunctions extends MyPanel
 			{
 				System.out.println("Timer2 running");
 				// step zero check whether to continue the algorithm or not
-				if (i + l >= j + m + 1 || m + 1 + j > r)
+				if ((x > m - l + 1) || j > r - m)
 				{
 					
 					timer.stop();
 					System.out.println("Timer2 stopping");
 					//mergeSortTimer.start();
 				}
+				
 				// Step one find a suitable index where to place the current rectangle
 				else if (codeFlag == 1)
 				{
@@ -654,7 +659,6 @@ public class SortingFunctions extends MyPanel
 						i++;
 						x++;
 					}
-					
 					else
 					{
 						codeFlag = 0;
@@ -664,11 +668,14 @@ public class SortingFunctions extends MyPanel
 				}
 				else if (downFlag == 1)
 				{
-					box.addOffsetRectangel(m + j + 1, 0, 1);
+					box.addOffsetRectangel(m + j + 1, 0, YCHANGE);
 					paintBox();
-					currentDownCount++;
-					if (currentDownCount >= 100)
+					currentDownCount += YCHANGE;
+					if (currentDownCount >= DOWN)
 					{
+						int excess = currentDownCount - DOWN;
+						box.addOffsetRectangel(m + j + 1, 0, -excess);
+						paintBox();
 						downFlag = 0;
 						rightBlockFlag = 1;
 						indexRightCount = 0;
