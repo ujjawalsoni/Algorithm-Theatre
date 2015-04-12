@@ -80,7 +80,6 @@ public class GUI
 	private ImageIcon rightWhiteArrow;
 	private ImageIcon leftBlackArrow;
 	private ImageIcon leftWhiteArrow;
-	
 
 
 	public GUI ()
@@ -255,47 +254,7 @@ public class GUI
 
 		});
 
-		mainTopPanel = new JPanel()
-		{
-			public void paintComponent(Graphics g) {
-				g.drawOval(600,		30,		30,	30);
-
-				g.drawOval(600-300,	30+60,	30,	30);
-				g.drawOval(600+300,	30+60,	30,	30);
-				
-				g.drawOval(600-300-150,	30+120,	30,	30);
-				g.drawOval(600-300+150,	30+120,	30,	30);
-				g.drawOval(600+300-150,	30+120,	30,	30);
-				g.drawOval(600+300+150,	30+120,	30,	30);
-				
-				g.drawOval(600-300-150-75,	30+180,	30,	30);
-				g.drawOval(600-300-150+75,	30+180,	30,	30);
-				g.drawOval(600-300+150-75,	30+180,	30,	30);
-				g.drawOval(600-300+150+75,	30+180,	30,	30);
-				g.drawOval(600+300-150-75,	30+180,	30,	30);
-				g.drawOval(600+300-150+75,	30+180,	30,	30);
-				g.drawOval(600+300+150-75,	30+180,	30,	30);
-				g.drawOval(600+300+150+75,	30+180,	30,	30);
-
-				g.drawOval(600-300-150-75-30,	30+240,	30,	30);
-				g.drawOval(600-300-150+75-30,	30+240,	30,	30);
-				g.drawOval(600-300+150-75-30,	30+240,	30,	30);
-				g.drawOval(600-300+150+75-30,	30+240,	30,	30);
-				g.drawOval(600-300-150-75+30,	30+240,	30,	30);
-				g.drawOval(600-300-150+75+30,	30+240,	30,	30);
-				g.drawOval(600-300+150-75+30,	30+240,	30,	30);
-				g.drawOval(600-300+150+75+30,	30+240,	30,	30);
-				g.drawOval(600+300-150-75-30,	30+240,	30,	30);
-				g.drawOval(600+300-150+75-30,	30+240,	30,	30);
-				g.drawOval(600+300+150-75-30,	30+240,	30,	30);
-				g.drawOval(600+300+150+75-30,	30+240,	30,	30);
-				g.drawOval(600+300-150-75+30,	30+240,	30,	30);
-				g.drawOval(600+300-150+75+30,	30+240,	30,	30);
-				g.drawOval(600+300+150-75+30,	30+240,	30,	30);
-				g.drawOval(600+300+150+75+30,	30+240,	30,	30);
-			}
-		}
-		;
+		mainTopPanel = new JPanel();
 		mainTopPanel.setOpaque(true);
 		mainTopPanel.setBackground(Color.LIGHT_GRAY);
 		mainTopPanel.setPreferredSize(new Dimension(1213,420));
@@ -306,10 +265,6 @@ public class GUI
 		gbc.insets = new Insets(0,0,0,0);
 		centrePanel.add (mainTopPanel, gbc);
 
-//		JLabel img = new JLabel(new ImageIcon("Images/circle.png"));
-//		img.setBounds (512,20,50,50);
-//		mainTopPanel.add(img);
-        
 		mainBottomPanel = new JPanel();
 		mainBottomPanel.setOpaque(true);
 		mainBottomPanel.setBackground(Color.white);
@@ -488,6 +443,34 @@ public class GUI
 		bottomPanel.add (developers, gbc);
 		developers.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
+		final ArrayList<Integer> list = new ArrayList<Integer>();
+		list.add(52);
+		list.add(34);
+		list.add(22);
+		list.add(46);
+		list.add(26);
+		list.add(97);
+		list.add(54);
+		list.add(76);
+		list.add(19);
+		list.add(44);
+		list.add(67);
+		list.add(84);
+		list.add(25);
+		list.add(4);
+		list.add(30);
+		list.add(99);
+		list.add(98);
+		list.add(40);
+		list.add(39);
+		list.add(33);
+		list.add(43);
+		BinaryTree b = new BinaryTree (list);
+
+		MyPanel_ selectionSort = new MyPanel_(b);
+		selectionSort.setVisible (true);
+		selectionSort.setBounds(0,0,1213,420);
+		mainTopPanel.add (selectionSort);
 		
 		mainFrame.pack();
 	    mainFrame.setVisible(true);
@@ -526,9 +509,4 @@ public class GUI
 	    return "<html>" + original.replaceAll("\n", "<br>");
 	}
 	
-	public void draw(Graphics2D g)
-	{
-		g.fillOval(10,10,10,10);
-	}
-
 }

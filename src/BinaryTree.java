@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -18,6 +19,13 @@ public class BinaryTree
 	{
 		root = new Node (d, null, 0, 0, 1);
 		root.color = Color.red;
+	}
+	
+	public BinaryTree (ArrayList<Integer> lst)
+	{
+		root = null;
+		for (int i=0; i<lst.size(); i++)
+			insert (lst.get(i));
 	}
 
 	public void insert (int d)
