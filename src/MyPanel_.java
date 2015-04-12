@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -32,7 +33,7 @@ class MyPanel_ extends JPanel implements ActionListener
 //		{
 //			System.out.println("data " + box.getRectangle(j).getData() + " Index " + box.getRectangle(j).getHeight());
 //		}
-		final Timer timer = new Timer(5, this);
+		final Timer timer = new Timer(800, this);
 		
 		ActionListener action = new ActionListener()
 		{
@@ -67,9 +68,43 @@ class MyPanel_ extends JPanel implements ActionListener
 //			int LeftMainFlag = 0;
 //			int width = 20;
 			
+			int val = 43;
+			Node temp = box.root;
+			boolean flag;
+			
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
+				
+				if (temp.data == val)
+				{
+					temp.changeNodeColor(Color.blue);
+					timer.stop();
+				}
+				
+				else 
+				{
+					if (!flag)
+					{
+						temp.changeNodeColor (Color.yellow);
+						temp.changeNodeBackgroundColor(Color.yellow);
+						flag = !flag;
+					}
+					
+					else
+					{
+						temp.changeNodeBackgroundColor(Color.white);
+						if (temp.data > val)
+							temp = temp.leftChild;
+						else
+							temp = temp.rightChild;
+						temp.changeEdgeColor(Color.yellow);
+						flag = !flag;
+					}
+				}
+				
+				
+				
 //				// step zero check whether to continue the algorithm or not
 //				if (i == 12)
 //					timer.stop();

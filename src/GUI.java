@@ -444,33 +444,15 @@ public class GUI
 		developers.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		final ArrayList<Integer> list = new ArrayList<Integer>();
-		list.add(52);
-		list.add(34);
-		list.add(22);
-		list.add(46);
-		list.add(26);
-		list.add(97);
-		list.add(54);
-		list.add(76);
-		list.add(19);
-		list.add(44);
-		list.add(67);
-		list.add(84);
-		list.add(25);
-		list.add(4);
-		list.add(30);
-		list.add(99);
-		list.add(98);
-		list.add(40);
-		list.add(39);
-		list.add(33);
-		list.add(43);
+		int[] a = {52,34,22,46,26,97,54,76,19,44,67,84,25,4,30,99,98,40,39,33,43};
+		for (int i=0; i<a.length; i++)
+			list.add(a[i]);
 		BinaryTree b = new BinaryTree (list);
 
-		MyPanel_ selectionSort = new MyPanel_(b);
-		selectionSort.setVisible (true);
-		selectionSort.setBounds(0,0,1213,420);
-		mainTopPanel.add (selectionSort);
+		MyPanel_ p = new MyPanel_(b);
+		p.setVisible (true);
+		p.setBounds(0,0,1213,420);
+		mainTopPanel.add (p);
 		
 		mainFrame.pack();
 	    mainFrame.setVisible(true);

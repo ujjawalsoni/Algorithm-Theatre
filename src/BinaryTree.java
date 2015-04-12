@@ -18,7 +18,6 @@ public class BinaryTree
 	public BinaryTree (int d)
 	{
 		root = new Node (d, null, 0, 0, 1);
-		root.color = Color.red;
 	}
 	
 	public BinaryTree (ArrayList<Integer> lst)
@@ -56,6 +55,94 @@ public class BinaryTree
 		
 		return node;
 	}
+	
+	public void delete (int d)
+	{
+		root = delete_ (root, d);
+	}
+	
+	private Node delete_ (Node node, int d)
+	{
+		// parent of the Node to be deleted
+		parent = null;
+		
+		// Node to be deleted
+		Node child = search (d);
+		
+		// if the Node has no child
+		if (child.leftChild == null && child.rightChild == null)
+		{
+			// if the bst has only one element
+			if (parent == null)
+				return null;
+
+			// otherwise
+			else
+			{
+				if (child == parent.leftChild)
+					parent.leftChild = null;
+				else
+					parent.rightChild = null;
+			
+				return node;
+			}
+		}
+		
+		// if Node has one child
+		else if ((child.rightChild == null && child.leftChild != null) || (child.rightChild != null && child.leftChild == null))
+		{
+			// if root is to be removed
+			if (parent == null)
+			{
+				// new root will be his child
+				node = (child.rightChild == null) ? child.leftChild : child.rightChild;
+				return node;
+			}
+
+			// else remove Node and Node's child becomes parent's child
+			else
+			{
+				if (child == parent.leftChild)
+					parent.leftChild = (child.rightChild == null) ? child.leftChild : child.rightChild;
+				else
+					parent.rightChild = (child.rightChild == null) ? child.leftChild : child.rightChild;
+				return root;
+			}
+		}
+		
+		// if the Node has both the childs
+		else
+		{
+			// parent of the successor and the successor
+			Node p_success = child;
+			Node successor = child.rightChild;
+			
+			// finding the successor
+			while (successor.leftChild != null)
+			{
+				p_success = successor;
+				successor = successor.leftChild;
+			}
+			
+			// changing the data of the Node to be deleted to successor's data
+			child.data = successor.data;
+			
+			// if successor's parent is the Node
+			if (p_success == child)
+				child.rightChild = successor.rightChild;
+			
+			// otherwise, replacing the Node with the successor
+			else
+			{
+				child.data = successor.data;
+				p_success.leftChild = successor.rightChild;
+			}
+			
+			return node;
+		}
+	}
+
+
 	
 	public Node search (int d)
 	{
@@ -97,7 +184,7 @@ public class BinaryTree
 			{
 				a = queue.poll();
 				Node temp = search (a);
-				System.out.println (a + " " + temp.x + " " + temp.y + " " + temp.height);
+				System.out.println (a);// + " " + temp.x + " " + temp.y + " " + temp.height);
 
 				if (temp.leftChild != null)
 					queue.add (temp.leftChild.data);
@@ -123,7 +210,7 @@ public class BinaryTree
 				a = queue.poll();
 				Node temp = search (a);
 				temp.drawNode(g);
-				System.out.println (a + " " + temp.x + " " + temp.y + " " + temp.height);
+//				System.out.println (a + " " + temp.x + " " + temp.y + " " + temp.height);
 
 				if (temp.leftChild != null)
 					queue.add (temp.leftChild.data);
