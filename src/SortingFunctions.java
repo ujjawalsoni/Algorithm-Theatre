@@ -726,7 +726,6 @@ public class SortingFunctions extends MyPanel
 						timer.stop();
 					}
 				}
-				
 			}
 		};
 		timer.addActionListener(action);
@@ -982,5 +981,4 @@ public class SortingFunctions extends MyPanel
 		timer.addActionListener(action);
 		timer.start();
 	}
-	
 }

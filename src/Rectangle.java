@@ -79,6 +79,14 @@ class Rectangle
 	
 	/******** setter functions ************************/
 	
+	public void setWidth(int x)
+	{
+		if (x > 0)
+			this.width = x;
+		else
+			this.width = 30;
+	}
+	
 	public void setX(int xPos)
 	{
 		this.x = xPos;

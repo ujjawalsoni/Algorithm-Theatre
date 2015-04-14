@@ -37,17 +37,17 @@ class ArrayRectangle
 	private int baseY = 0;
 	private int number = 0;
 	private Rectangle rectArray[] = null;
-	private int gap = 0;
-	private int sizeWidth = 20;
+	private int gap = 5;
+	private int sizeWidth = 30;
 	private Color baseColor = Color.RED;
 	
 	/**************** constructors ***********************/
 	
 	public ArrayRectangle()
 	{
-		baseX = baseY = 0;
-		sizeWidth = 20;
-		gap = 10;
+		baseX = baseY = 100;
+		sizeWidth = 30;
+		gap = 5;
 		number = 0;
 		rectArray = null;
 		baseColor = Color.RED;
@@ -59,10 +59,10 @@ class ArrayRectangle
 	 */
 	public ArrayRectangle(int n)
 	{
-		baseX = baseY = 0;
+		baseX = baseY = 100;
 		baseColor = Color.RED;
-		sizeWidth = 20;
-		gap = 10;
+		sizeWidth = 30;
+		gap = 5;
 		
 		if (n > 0)
 		{
@@ -71,11 +71,11 @@ class ArrayRectangle
 			for (int i = 0; i < n; i++)
 			{
 				rectArray[i] = new Rectangle();
-				rectArray[i].setHeight(0); // setting default value
+				rectArray[i].setHeight(i * 2); // setting default value
 				rectArray[i].setX(baseX + (sizeWidth + gap) * i);
-				rectArray[i].setY(baseY); // So that all rectangle have same base
+				rectArray[i].setY(baseY - i * 2); // So that all rectangle have same base
 				rectArray[i].setColor(baseColor);
-				rectArray[i].setData(0);
+				rectArray[i].setData(i * 2);
 			}
 		}
 		else
@@ -140,57 +140,98 @@ class ArrayRectangle
 	 * 2. setNumber sets number = 0 if argument was less than 0
 	 */
 	
+	public void resetArrayRectangle()
+	{
+		
+		baseColor = Color.RED;
+		for (int k = 0; k < number; k++)
+		{
+			rectArray[k].setX(baseX + (sizeWidth + gap) * k);
+			rectArray[k].setY(baseY - rectArray[k].getData()); // So that all rectangle have same base
+			rectArray[k].setColor(baseColor);
+		}
+	}
+	
 	public void setBaseX(int xPos)
 	{
 		this.baseX = xPos;
+		updateAllRectangleCordinates();
 	}
 	
 	public void setBaseY(int yPos)
 	{
 		this.baseY = yPos;
+		updateAllRectangleCordinates();
+	}
+	
+	public void setAllWidth()
+	{
+		for (int i = 0; i < number; i++)
+		{
+			this.getRectangle(i).setWidth(sizeWidth);
+		}
 	}
 	
 	public void setSizeWidth(int a)
 	{
 		sizeWidth = a;
+		this.setAllWidth();
+		this.updateAllRectangleCordinates();
 	}
 	
 	public void setGap(int a)
 	{
 		gap = a;
-	}
-	
-	public void setNumber(int n)
-	{
-		if (n > 0)
-			number = n;
-		else
-		{
-			System.out.println("wrong number passed at the setNumber, class : ArrayRectangle");
-			number = 0;
-		}
-	}
-	
-	public void setBaseColor(Color base)
-	{
-		baseColor = base;
+		this.updateAllRectangleCordinates();
 	}
 	
 	public void setRectangleArray(Rectangle array[])
 	{
 		rectArray = array;
 		number = array.length;
+		resetArrayRectangle();
 	}
 	
 	public void setRectangle(Rectangle rect, int index)
 	{
 		if (index < 0 || index >= this.getNumber() || rect == null)
 			return;
-		
 		rectArray[index] = rect;
+		updateAllRectangleCordinates();
 	}
 	
 	/******* other functions *************************/
+	
+	// Color functions
+	
+	public void setBaseColor(Color base)
+	{
+		baseColor = base;
+		this.updateAllColor();
+	}
+	
+	public void updateAllColor()
+	{
+		for (int i = 0; i < number; i++)
+		{
+			this.getRectangle(i).setColor(baseColor);
+		}
+	}
+	
+	public void setColorRange(int i, int j, Color c)
+	{
+		if (i > j || i < 0 || j >= number)
+		{
+			System.out.println("wrong index given to the setColorRectangle method\n i = " + i + " j = " + j);
+			
+			return;
+		}
+		else
+		{
+			for (int k = i; k <= j; k++)
+				this.getRectangle(k).setColor(c);
+		}
+	}
 	
 	/**
 	 * It creates a array of rectangles with
@@ -240,31 +281,32 @@ class ArrayRectangle
 	{
 		if (index >= number || index < 0)
 		{
-			System.out.println("wrong index given to the updateRectangelCordinates method");
+			System.out.println("wrong index given to the updateRectangleCordinates method");
 			return;
 		}
 		int h = rectArray[index].getHeight();
 		rectArray[index].updateCordinates(baseX + (gap + sizeWidth) * index, baseY - h);
 	}
 	
-	public void changeRectangelCordinates(int index, int xPos, int yPos)
+	public void changeRectangleCordinates(int index, int xPos, int yPos)
 	{
 		if (index >= number || index < 0)
 		{
-			System.out.println("wrong index given to the moveRectangel method");
+			System.out.println("wrong index given to the moveRectangle method");
 			return;
 		}
 		int h = rectArray[index].getHeight();
 		rectArray[index].updateCordinates(xPos, yPos - h);
 	}
 	
-	public void addOffsetRectangel(int index, int xOffset, int yOffset)
+	public void addOffsetRectangle(int index, int xOffset, int yOffset)
 	{
 		if (index >= number || index < 0)
 		{
-			System.out.println("wrong index given to the moveRectangel method");
+			System.out.println("wrong index given to the moveRectangle method");
 			return;
 		}
 		rectArray[index].addOffset(xOffset, yOffset);
 	}
+	
 }
