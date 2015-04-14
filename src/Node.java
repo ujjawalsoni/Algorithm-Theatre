@@ -19,6 +19,7 @@ public class Node
 	Color nodeColor;
 	Color nodeBGColor;
 	Color edgeColor;
+	Color textColor;
 	int height;
 
 	public Node (int d, Node p, int x, int y, int h)
@@ -32,6 +33,7 @@ public class Node
 		nodeColor = Color.black;
 		nodeBGColor = Color.white;
 		edgeColor = Color.black;
+		textColor = Color.black;
 		height = h;
 	}
 
@@ -47,7 +49,7 @@ public class Node
 		Stroke oldStroke = g2.getStroke();
 		g2.setStroke(new BasicStroke(2));
 		g2.drawOval(x, y, 32, 32);
-		g2.setColor(Color.black);
+		g2.setColor(textColor);
 		g2.drawString (Integer.toString(data), x+((data/10) == 0 ? 12:8), y+20);
 
 		g2.setColor(edgeColor);
@@ -77,5 +79,15 @@ public class Node
 	public void changeEdgeColor (Color c)
 	{
 		edgeColor = c;
+	}
+	
+	public void changeTextColor (Color c)
+	{
+		textColor = c;
+	}
+	
+	public void changeNodeData (int d)
+	{
+		data = d;
 	}
 }

@@ -256,7 +256,7 @@ public class GUI
 
 		mainTopPanel = new JPanel();
 		mainTopPanel.setOpaque(true);
-		mainTopPanel.setBackground(Color.LIGHT_GRAY);
+		mainTopPanel.setBackground(Color.white);
 		mainTopPanel.setPreferredSize(new Dimension(1213,420));
 		mainTopPanel.setLayout(null);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -444,15 +444,26 @@ public class GUI
 		developers.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		final ArrayList<Integer> list = new ArrayList<Integer>();
-		int[] a = {52,34,22,46,26,97,54,76,19,44,67,84,25,4,30,99,98,40,39,33,43};
+		int[] a = {52,34,22,46,26,97,54,76,19,44,67,84,25,4,30,99,98,40,39,33,43,50,55};
 		for (int i=0; i<a.length; i++)
 			list.add(a[i]);
-		BinaryTree b = new BinaryTree (list);
+		BinarySearchTree b = new BinarySearchTree (list);
 
+//		SortingFunctions p = new SortingFunctions(list);
 		MyPanel_ p = new MyPanel_(b);
+		p.setBackground(Color.white);
 		p.setVisible (true);
 		p.setBounds(0,0,1213,420);
 		mainTopPanel.add (p);
+//		p.search(84);
+//		p.insert(45);
+		p.print_bfm();
+		System.out.println(p.delete(26));
+//		p.print_bfm();
+//		p.delete(34);
+//		p.bubbleSort();
+//		p.selectionSort();
+//		p.insertionSort();
 		
 		mainFrame.pack();
 	    mainFrame.setVisible(true);

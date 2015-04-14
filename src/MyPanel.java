@@ -9,6 +9,79 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+
+class MyPanel extends JPanel implements ActionListener
+{
+	private static final int CHANGEX = 1;
+	private static final int TIMER_SPEED = 100;
+	protected ArrayRectangle box;
+	
+	public MyPanel(ArrayList<Integer> list)
+	{
+		setBorder(BorderFactory.createLineBorder(Color.black));
+		box = new ArrayRectangle();
+		box.setBaseX(200);
+		box.setBaseY(200);
+		box.initializeRectangle(list);
+		this.paintBox();
+		
+	}
+	
+	public int getRectangleSpace()
+	{
+		if (this.box.getNumber() > 0)
+			return (this.box.getRectangle(0).getWidth() + this.box.getGap());
+		else
+		{
+			System.out.println("The list has not been initialized: error getRectangleSpace ");
+			return 0;
+		}
+	}
+	
+	void paintBox()
+	{
+		
+		// Current square state, stored as final variables
+		// to avoid repeat invocations of the same methods.
+		
+		// The square is moving, repaint background
+		// over the old square location.
+		repaint();
+		// delay(100);
+		// repaint(CURR_X + redSquare.getWidth(), CURR_Y + redSquare.getHeight(),
+		// CURR_W + OFFSET + 10, CURR_H + OFFSET + 10);
+		
+		// Update coordinates.
+		// box.setBaseX(x);
+		// box.setBaseY(y);
+		// Repaint the square at the new location.
+		// repaint(redSquare.getX(), redSquare.getY(), redSquare.getWidth() +
+		// OFFSET, redSquare.getHeight() + OFFSET);
+		// repaint(CURR_X + redSquare.getWidth(), CURR_Y + redSquare.getHeight(),
+		// CURR_W + OFFSET + 10, CURR_H + OFFSET + 10);
+		// repaint();
+	}
+	
+	public Dimension getPreferredSize()
+	{
+		return new Dimension(500, 500);
+	}
+	
+	public void paintComponent(Graphics g)
+	{
+		super.paintComponent(g);
+		box.paintArrayRectangle(g);
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent arg0)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+}
+
+/*
 class MyPanel extends JPanel implements ActionListener
 {
 	private static final int CHANGEX = 1;
@@ -518,7 +591,7 @@ class MyPanel extends JPanel implements ActionListener
 		
 	}
 	
-/*	public void merge(final int l1, final int m1, final int r2, Timer mergeSortTimer)
+	public void merge(final int l1, final int m1, final int r2, Timer mergeSortTimer)
 	{
 		final Timer timer = new Timer(3, this);
 		ActionListener action = new ActionListener()
@@ -660,7 +733,7 @@ class MyPanel extends JPanel implements ActionListener
 				}
 			}
 	}
-*/
+
 	
 	private void paintBox()
 	{
@@ -705,3 +778,4 @@ class MyPanel extends JPanel implements ActionListener
 		
 	}
 }
+*/

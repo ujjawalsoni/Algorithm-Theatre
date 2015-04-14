@@ -47,7 +47,7 @@ class ArrayRectangle
 	{
 		baseX = baseY = 0;
 		sizeWidth = 20;
-		gap = 0;
+		gap = 10;
 		number = 0;
 		rectArray = null;
 		baseColor = Color.RED;
@@ -62,7 +62,7 @@ class ArrayRectangle
 		baseX = baseY = 0;
 		baseColor = Color.RED;
 		sizeWidth = 20;
-		gap = 0;
+		gap = 10;
 		
 		if (n > 0)
 		{

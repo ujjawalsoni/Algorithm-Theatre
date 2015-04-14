@@ -7,10 +7,10 @@ import javax.swing.Timer;
 public class SortingFunctions extends MyPanel
 {
 	
-	private static final int TIMER_SPEED = 5;
-	private static final int XCHANGE = 1;
-	private static final int YCHANGE = 1;
-	private static final int DOWN = 200;
+	private static final int TIMER_SPEED = 1;
+	private static final int XCHANGE = 2;
+	private static final int YCHANGE = 2;
+	private static final int DOWN = 100;
 	
 	public SortingFunctions(ArrayList<Integer> list)
 	{
@@ -630,6 +630,7 @@ public class SortingFunctions extends MyPanel
 			int upFlag = 0;
 			int LeftMainFlag = 0;
 			int width = 25;
+			int x=0;
 			
 			//TODO the stopping condition is wrong 
 			@Override

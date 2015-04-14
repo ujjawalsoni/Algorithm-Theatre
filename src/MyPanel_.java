@@ -3,6 +3,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -10,75 +12,94 @@ import javax.swing.Timer;
 
 class MyPanel_ extends JPanel implements ActionListener
 {
-//	private static final int CHANGEX = 1;
-//	private static final int TIMER_SPEED = 100;
-//	ArrayRectangle box;
-//	static int flag;
-	BinaryTree box;
+	private static final long serialVersionUID = 1L;
+	BinarySearchTree bst;
+	private static final int TIMER_SPEED = 800;
+
 	
-	public MyPanel_(BinaryTree b)
+	public MyPanel_(BinarySearchTree b)
 	{
-//		setBorder(BorderFactory.createLineBorder(Color.black));
-//		box = new ArrayRectangle();
-//		box = new BinaryTree();
-		box = b;
-//		box.setBaseX(200);
-//		box.setBaseY(200);
-//		box.initializeRectangle(list);
-//		this.paintBox();
-//		flag = 0;
-//		
-//		System.out.println("\nPass 0\n");
-//		for (int j = 0; j < box.getArrayRectangle().length; j++)
-//		{
-//			System.out.println("data " + box.getRectangle(j).getData() + " Index " + box.getRectangle(j).getHeight());
-//		}
-		final Timer timer = new Timer(800, this);
+		bst = b;
+	}
+	
+	public void search (final int val)
+	{
+		final Timer timer = new Timer(TIMER_SPEED, this);
 		
 		ActionListener action = new ActionListener()
 		{
-			// for running the code flag part initial conditions 
-			
-			// i represents the index of the current rectangle
-//			int i = 1;
-			
-			//stores the index of the first rectangle whose data is less of equal to the current rectangle 
-//			int k = 0;
-			
-			// varies from k + 1 to i - 1 (used for shifting all rectangles in this range)
-//			int index = 0;
-			
-			// Stores how much a the current rectangle has moved down
-//			int currentDownCount = 0;
-			
-			// counts how much a rectangle[index] has moved to the right (while shifting the rectangles) 	
-//			int indexRightCount = 0;
-			
-			// counts how much a current rectangle has moved left
-//			int currentLeftCount = 0;
-			
-			//  counts how much a current rectangle has moved up
-//			int currentUpCount = 0;
-			
-//			int codeFlag = 1;
-//			int rightFlag = 0;
-//			int rightBlockFlag = 0;
-//			int downFlag = 0;
-//			int upFlag = 0;
-//			int LeftMainFlag = 0;
-//			int width = 20;
-			
-			int val = 43;
-			Node temp = box.root;
+			Node temp = bst.root;
 			boolean flag;
+			boolean finish;
 			
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				
-				if (temp.data == val)
+				if (!finish)
 				{
-					temp.changeNodeColor(Color.blue);
+					if (temp.data == val)
+					{
+						temp.changeNodeBackgroundColor(Color.blue);
+						temp.changeNodeColor(Color.blue);
+						temp.changeTextColor(Color.white);
+						finish = true;
+					}
+					
+					else 
+					{	if (!flag)
+						{	temp.changeNodeColor (Color.yellow);
+							temp.changeNodeBackgroundColor(Color.yellow);
+							flag = !flag;
+						}
+						else
+						{	temp.changeNodeBackgroundColor(Color.white);
+							if (temp.data > val)
+								temp = temp.leftChild;
+							else
+								temp = temp.rightChild;
+							temp.changeEdgeColor(Color.yellow);
+							flag = !flag;
+						}
+					}
+				}
+				else
+				{	unColorPath(temp);
+					timer.stop();
+				}
+				paintBox();
+			}
+		};
+		
+		timer.addActionListener(action);
+		timer.start();
+		
+	}
+	
+	public void insert (final int val)
+	{
+		final Timer timer = new Timer(TIMER_SPEED, this);
+		
+		ActionListener action = new ActionListener()
+		{
+			Node temp = bst.root;
+			boolean flag;
+			boolean finish;
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if (temp == null)
+				{
+					bst.root = new Node (val, null, 600, 30, 1);
+					timer.stop();
+				}
+				
+				else if (finish)
+				{
+					temp.changeEdgeColor(Color.black);
+					temp.changeNodeBackgroundColor(Color.white);
+					temp.changeNodeColor(Color.black);
+					temp.changeTextColor(Color.black);
 					timer.stop();
 				}
 				
@@ -88,148 +109,295 @@ class MyPanel_ extends JPanel implements ActionListener
 					{
 						temp.changeNodeColor (Color.yellow);
 						temp.changeNodeBackgroundColor(Color.yellow);
+						temp.changeEdgeColor(Color.black);
 						flag = !flag;
 					}
 					
 					else
 					{
+						temp.changeNodeColor(Color.black);
 						temp.changeNodeBackgroundColor(Color.white);
 						if (temp.data > val)
-							temp = temp.leftChild;
+						{
+							if (temp.leftChild == null)
+							{	temp.leftChild = new Node (val, temp, 
+										temp.x-600/(int)Math.pow(2,temp.height), temp.y+60, temp.height+1);
+								temp = temp.leftChild;
+								temp.changeEdgeColor(Color.yellow);
+								temp.changeNodeBackgroundColor(Color.white);
+								temp.changeNodeColor(Color.white);
+								temp.changeTextColor(Color.white);
+								finish = true;
+							}
+							else
+							{
+								temp = temp.leftChild;
+								temp.changeEdgeColor(Color.yellow);
+							}
+						}
 						else
-							temp = temp.rightChild;
-						temp.changeEdgeColor(Color.yellow);
+						{
+							if (temp.rightChild == null)
+							{	temp.rightChild = new Node (val, temp, 
+										temp.x+600/(int)Math.pow(2,temp.height), temp.y+60, temp.height+1);
+								temp = temp.rightChild;
+								temp.changeEdgeColor(Color.yellow);
+								temp.changeNodeBackgroundColor(Color.white);
+								temp.changeNodeColor(Color.white);
+								temp.changeTextColor(Color.white);
+								finish = true;
+							}
+							else
+							{
+								temp = temp.rightChild;
+								temp.changeEdgeColor(Color.yellow);
+							}
+						}
 						flag = !flag;
 					}
 				}
 				
-				
-				
-//				// step zero check whether to continue the algorithm or not
-//				if (i == 12)
-//					timer.stop();
-//				
-//				// Step one find a suitable index where to place the current rectangle
-//				else if (codeFlag == 1)
-//				{
-//					Rectangle currRect = box.getRectangle(i);
-//					Rectangle scanRect;
-//					for (k = i - 1; k >= 0; k--)
-//					{
-//						scanRect = box.getRectangle(k);
-//						if (scanRect.getData() > currRect.getData())
-//							continue;
-//						else
-//						{
-//							// getting the index of first rectangle to move to the left
-//							index = i - 1;
-//							break;
-//						}
-//					}
-//					codeFlag = 0;
-//					downFlag = 1;
-//					currentDownCount = 0;
-//				}
-//				
-//				else if (downFlag == 1)
-//				{
-//					box.addOffsetRectangel(i, 0, 1);
-//					paintBox();
-//					currentDownCount++;
-//					if (currentDownCount >= 100)
-//					{
-//						downFlag = 0;
-//						rightBlockFlag = 1;
-//						indexRightCount = 0;
-//					}
-//				}
-//				/////////////////////////////////////////////
-//				else if (rightBlockFlag == 1)
-//				{
-//					if (index <= k)
-//					{
-//						rightBlockFlag = 0;
-//						LeftMainFlag = 1;
-//						currentLeftCount = 0;
-//					}
-//					else
-//					{
-//						rightFlag = 1;
-//						rightBlockFlag = 0;
-//						indexRightCount = 0;
-//					}
-//				}
-//				
-//				else if (rightFlag == 1)
-//				{
-//					box.addOffsetRectangel(index, 1, 0);
-//					paintBox();
-//					indexRightCount++;
-//					
-//					if (indexRightCount >= width)
-//					{
-//						rightFlag = 0;
-//						rightBlockFlag = 1;
-//						index--;
-//					}
-//				}
-//				//////////////////////////////////////////
-//				else if (LeftMainFlag == 1)
-//				{
-//					box.addOffsetRectangel(i, -1, 0);
-//					currentLeftCount++;
-//					paintBox();
-//					if (currentLeftCount >= width * (i - 1 - k))
-//					{
-//						LeftMainFlag = 0;
-//						upFlag = 1;
-//						currentUpCount = 0;
-//					}
-//				}
-//				
-//				else if (upFlag == 1)
-//				{
-//					box.addOffsetRectangel(i, 0, -1);
-//					currentUpCount++;
-//					paintBox();
-//					if (currentUpCount >= 100)
-//					{
-//						
-//						Rectangle currRect = box.getRectangle(i);
-//						System.out.println("\n\ni value " + box.getRectangle(i).getData());
-//						Rectangle scanRect;
-//						int t;
-//						for (t = i - 1; t >= 0; t--)
-//						{
-//							scanRect = box.getRectangle(t);
-//							System.out.println("t value " + scanRect.getData());
-//							
-//							if (scanRect.getData() > currRect.getData())
-//								box.setRectangle(box.getRectangle(t), t + 1);
-//							else
-//							{
-//								break;
-//							}
-//						}
-//						box.setRectangle(currRect, t + 1);
-//						System.out.println("\nPass " + i + "\n");
-//						for (int j = 0; j < box.getArrayRectangle().length; j++)
-//						{
-//							System.out.println("data " + box.getRectangle(j).getData() + " Index " + j);
-//						}
-//						upFlag = 0;
-//						codeFlag = 1;
-//						i++;
-//					}
-//				}
 				paintBox();
 			}
 		};
 		
 		timer.addActionListener(action);
 		timer.start();
-		//timer1.start();
 		
+	}
+
+	public boolean delete (final int val)
+	{
+		final Timer timer = new Timer(TIMER_SPEED, this);
+		
+		ActionListener action = new ActionListener()
+		{
+			Node temp = bst.root;
+			Node successor;
+			Node parentSuccessor;
+			boolean flag;
+			boolean searched;
+			boolean finish;
+			boolean successflag;
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if (!(searched || finish))
+				{
+					System.out.println("Searching ..");
+					if (temp.data == val)
+					{
+						temp.changeNodeColor(Color.red);
+						searched = true;
+					}
+					
+					else 
+					{
+						if (!flag)
+						{
+							temp.changeNodeColor (Color.yellow);
+							temp.changeNodeBackgroundColor(Color.yellow);
+							flag = !flag;
+						}
+						else
+						{
+							temp.changeNodeBackgroundColor(Color.white);
+							if (temp.data > val)
+								temp = temp.leftChild;
+							else
+								temp = temp.rightChild;
+							temp.changeEdgeColor(Color.yellow);
+							flag = !flag;
+						}
+					}
+				}
+				
+				else if (!finish)
+				{
+					if (temp.leftChild == null && temp.rightChild == null)
+					{
+						if (temp.parent == null)
+							bst.root = null;
+						else
+						{
+							if (temp == temp.parent.leftChild)
+								temp.parent.leftChild = null;
+							else
+								temp.parent.rightChild = null;
+						}
+						finish = true;
+					}
+					else if (temp.rightChild == null)
+					{
+						if (temp.parent == null)
+						{
+							bst.root = temp.leftChild;
+							bst.root.parent = null;
+						}
+						else
+						{
+							if (temp == temp.parent.leftChild)
+							{
+								temp.parent.leftChild = temp.leftChild;
+								temp.parent.leftChild.parent = temp.parent;
+							}
+							else
+							{
+								temp.parent.rightChild = temp.leftChild;
+								temp.parent.rightChild.parent = temp.parent;
+							}
+						}
+						temp = temp.leftChild;
+						finish = true;
+					}
+					else if (temp.leftChild == null)
+					{
+						if (temp.parent == null)
+						{
+							bst.root = temp.rightChild;
+							bst.root.parent = null;
+						}
+						else
+						{
+							if (temp == temp.parent.leftChild)
+							{
+								temp.parent.leftChild = temp.rightChild;
+								temp.parent.leftChild.parent = temp.parent;
+							}
+							else
+							{
+								temp.parent.rightChild = temp.rightChild;
+								temp.parent.rightChild.parent = temp.parent;
+							}
+						}
+						temp = temp.rightChild;
+						finish = true;
+					}
+					else
+					{
+						if (!successflag)
+						{
+							unColorPath(temp.parent);
+							temp.changeEdgeColor(Color.black);
+							successor = temp.rightChild;
+							successor.changeEdgeColor(Color.yellow);
+							successflag = true;
+						}
+
+						if (successor != null)
+						{
+							if (flag)
+							{
+								successor.changeNodeColor (Color.yellow);
+								successor.changeNodeBackgroundColor(Color.yellow);
+								parentSuccessor = successor;
+								successor = successor.leftChild;
+								flag = !flag;
+							}
+							else
+							{
+								successor.parent.changeNodeBackgroundColor(Color.white);
+								successor.changeEdgeColor(Color.yellow);
+								flag = !flag;
+							}
+						}
+						else
+						{
+							temp.changeNodeData (parentSuccessor.data);
+							temp = parentSuccessor;
+						}
+					}
+				}
+				
+				else
+				{
+					updateAllNodes(temp);
+					unColorPath(temp);
+					timer.stop();
+				}
+				paintBox();
+			}
+		};
+
+		timer.addActionListener(action);
+		timer.start();
+		return true;
+	}
+
+	public void print_bfm ()
+	{
+		if (bst.root == null)
+			return;
+
+		Queue<Node> queue = new LinkedList<Node>();
+		queue.add (bst.root);
+
+		while (queue.size() > 0)
+		{
+			Node temp = queue.poll();
+			System.out.printf ("%d ", temp.data);
+
+			if (temp.leftChild != null)
+				queue.add (temp.leftChild);
+			if (temp.rightChild != null)
+				queue.add (temp.rightChild);
+		}
+		System.out.println();
+	}
+	
+	private void updateAllNodes (Node node)
+	{
+		Queue<Node> queue = new LinkedList<Node>();
+		queue.add (node);
+
+		while (queue.size() != 0)
+		{
+			Node a;
+			while (queue.size() > 0)
+			{
+				a = queue.poll();
+				if (a.parent == null)
+				{
+					a.height = 1;
+					a.x = 600;
+					a.y = 30;
+				}
+				else
+				{
+					if (a == a.parent.leftChild)
+					{
+						a.height = a.parent.height+1;
+						a.x = a.parent.x - 600/(int)Math.pow(2,a.parent.height);
+						a.y = a.parent.y + 60;
+					}
+					else
+					{
+						a.height = a.parent.height+1;
+						a.x = a.parent.x + 600/(int)Math.pow(2,a.parent.height);
+						a.y = a.parent.y + 60;
+					}
+				}
+
+				if (a.leftChild != null)
+					queue.add (a.leftChild);
+				if (a.rightChild != null)
+					queue.add (a.rightChild);
+			}
+		}
+	}
+
+	private void unColorPath (Node n)
+	{
+		Node temp = n;
+		while (temp != null)
+		{
+			temp.changeNodeColor(Color.black);
+			temp.changeEdgeColor(Color.black);
+			temp.changeNodeBackgroundColor(Color.white);
+			temp.changeTextColor(Color.black);
+			temp = temp.parent;
+		}
 	}
 	
 	private void paintBox()
@@ -246,8 +414,8 @@ class MyPanel_ extends JPanel implements ActionListener
 		// CURR_W + OFFSET + 10, CURR_H + OFFSET + 10);
 		
 		// Update coordinates.
-		// box.setBaseX(x);
-		// box.setBaseY(y);
+		// bst.setBaseX(x);
+		// bst.setBaseY(y);
 		// Repaint the square at the new location.
 		// repaint(redSquare.getX(), redSquare.getY(), redSquare.getWidth() +
 		// OFFSET, redSquare.getHeight() + OFFSET);
@@ -264,8 +432,7 @@ class MyPanel_ extends JPanel implements ActionListener
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
-		g.drawString("This is my custom Panel!", 10, 20);
-		box.drawTree(g);
+		bst.drawTree(g);
 	}
 	
 	@Override
