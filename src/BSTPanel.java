@@ -10,14 +10,14 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 
-class MyPanel_ extends JPanel implements ActionListener
+class BSTPanel extends JPanel implements ActionListener
 {
 	private static final long serialVersionUID = 1L;
 	BinarySearchTree bst;
 	private static final int TIMER_SPEED = 800;
 
 	
-	public MyPanel_(BinarySearchTree b)
+	public BSTPanel(BinarySearchTree b)
 	{
 		bst = b;
 	}
@@ -185,7 +185,6 @@ class MyPanel_ extends JPanel implements ActionListener
 			{
 				if (!(searched || finish))
 				{
-					System.out.println("Searching ..");
 					if (temp.data == val)
 					{
 						temp.changeNodeColor(Color.red);
@@ -399,29 +398,10 @@ class MyPanel_ extends JPanel implements ActionListener
 			temp = temp.parent;
 		}
 	}
-	
+
 	private void paintBox()
 	{
-		
-		// Current square state, stored as final variables
-		// to avoid repeat invocations of the same methods.
-		
-		// The square is moving, repaint background
-		// over the old square location.
 		repaint();
-		// delay(100);
-		// repaint(CURR_X + redSquare.getWidth(), CURR_Y + redSquare.getHeight(),
-		// CURR_W + OFFSET + 10, CURR_H + OFFSET + 10);
-		
-		// Update coordinates.
-		// bst.setBaseX(x);
-		// bst.setBaseY(y);
-		// Repaint the square at the new location.
-		// repaint(redSquare.getX(), redSquare.getY(), redSquare.getWidth() +
-		// OFFSET, redSquare.getHeight() + OFFSET);
-		// repaint(CURR_X + redSquare.getWidth(), CURR_Y + redSquare.getHeight(),
-		// CURR_W + OFFSET + 10, CURR_H + OFFSET + 10);
-		// repaint();
 	}
 	
 	public Dimension getPreferredSize()

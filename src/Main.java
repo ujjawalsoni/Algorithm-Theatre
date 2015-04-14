@@ -28,9 +28,7 @@ public class Main
 							.append("......else: insert extracted element\n")
 							.toString();
 		
-//		System.out.println(content);
 		g.setCodeTraceLabel(content);
-
 		
 	}
 }
