@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -7,10 +8,18 @@ import javax.swing.Timer;
 public class SortingFunctions extends MyPanel
 {
 	
-	private static final int TIMER_SPEED = 1;
-	private static final int XCHANGE = 2;
-	private static final int YCHANGE = 2;
+	private static final int TIMER_SPEED = 10;
+	private static final int XCHANGE = 4;
+	private static final int YCHANGE = 4;
 	private static final int DOWN = 100;
+	private static final int DELAY = 50;
+	private static final Color BASE_COLOR = Color.RED;
+	private static final Color END_COLOR = Color.YELLOW;
+	private static final Color DFAULT_COLOR = Color.YELLOW;
+	private static final Color FOCUS_COLOR1 = Color.BLUE;
+	private static final Color FOCUS_COLOR2 = Color.GREEN;
+	private static final Color BLOCK_COLOR1 = Color.PINK;
+	private static final Color BLOCK_COLOR2 = Color.ORANGE;
 	
 	public SortingFunctions(ArrayList<Integer> list)
 	{
@@ -19,10 +28,13 @@ public class SortingFunctions extends MyPanel
 	
 	public Timer bubbleSort()
 	{
-		
+		box.setBaseColor(BASE_COLOR);
+		box.resetArrayRectangle();
+		paintBox();
 		final Timer timer = new Timer(TIMER_SPEED, this);
 		final int width = super.getRectangleSpace();
 		final int size = super.box.getArrayRectangle().length;
+		
 		ActionListener action = new ActionListener()
 		{
 			// i represents the index of the outer loop
@@ -63,19 +75,42 @@ public class SortingFunctions extends MyPanel
 			// moving a rectangle to the left
 			int leftFlag = 0;
 			
+			// for halting for some time
+			int delay1 = 0;
+			
+			// code for delay
+			int delayFlag1 = 0;
+			
+			int delay2 = 0;
+			
+			// code for delay
+			int delayFlag2 = 0;
+			
+			int delay3 = 0;
+			
+			// code for delay
+			int delayFlag3 = 0;
+			
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				// step zero check whether to continue the algorithm or not
 				if ((i >= size))
+				{
 					timer.stop();
-				
+					box.setColorRange(0, box.getNumber() - 1, END_COLOR);
+					paintBox();
+				}
 				// inner loop conditions
 				else if (j >= size - 1 - i)
 				{
 					// if no swap has been done in the inner loop then stop the whole process
 					if (swap == 0)
+					{
 						timer.stop();
+						box.setColorRange(0, box.getNumber() - 1, END_COLOR);
+						paintBox();
+					}
 					i++;
 					swap = 0;
 					j = 0;
@@ -87,30 +122,57 @@ public class SortingFunctions extends MyPanel
 				{
 					Rectangle currRect = box.getRectangle(j);
 					Rectangle nextRect = box.getRectangle(j + 1);
-					
+					box.getRectangle(j).setColor(FOCUS_COLOR1);
+					box.getRectangle(j + 1).setColor(FOCUS_COLOR2);
+					paintBox();
 					if (nextRect.getData() < currRect.getData())
 					{
 						swap = 1;
 						codeFlag = 0;
-						downFlag = 1;
-						currentDownCount = 0;
+						delay3 = 0;
+						delayFlag3 = 1;
 					}
 					else
 					{
+						codeFlag = 0;
+						delay1 = 0;
+						delayFlag1 = 1;
+					}
+				}
+				else if (delayFlag3 == 1)
+				{
+					delay3++;
+					if (delay3 > DELAY)
+					{
+						delayFlag3 = 0;
+						downFlag = 1;
+						currentDownCount = 0;
+					}
+				}
+				// introducing delay
+				else if (delayFlag1 == 1)
+				{
+					delay1++;
+					if (delay1 > DELAY)
+					{
+						delayFlag1 = 0;
+						codeFlag = 1;
+						box.getRectangle(j).setColor(BASE_COLOR);
+						box.getRectangle(j + 1).setColor(BASE_COLOR);
+						paintBox();
 						j++;
 					}
 				}
-				
 				//shifting the next block down
 				else if (downFlag == 1)
 				{
-					box.addOffsetRectangel(j + 1, 0, YCHANGE);
+					box.addOffsetRectangle(j + 1, 0, YCHANGE);
 					paintBox();
 					currentDownCount += YCHANGE;
 					if (currentDownCount >= DOWN)
 					{
 						int excess = currentDownCount - DOWN;
-						box.addOffsetRectangel(j + 1, 0, -excess);
+						box.addOffsetRectangle(j + 1, 0, -excess);
 						paintBox();
 						downFlag = 0;
 						rightFlag = 1;
@@ -121,13 +183,13 @@ public class SortingFunctions extends MyPanel
 				// shifting the current block to its right
 				else if (rightFlag == 1)
 				{
-					box.addOffsetRectangel(j, XCHANGE, 0);
+					box.addOffsetRectangle(j, XCHANGE, 0);
 					paintBox();
 					indexRightCount += XCHANGE;
 					if (indexRightCount >= width)
 					{
 						int excess = indexRightCount - width;
-						box.addOffsetRectangel(j, -excess, 0);
+						box.addOffsetRectangle(j, -excess, 0);
 						paintBox();
 						rightFlag = 0;
 						leftFlag = 1;
@@ -138,13 +200,13 @@ public class SortingFunctions extends MyPanel
 				// shifting the next block to left
 				else if (leftFlag == 1)
 				{
-					box.addOffsetRectangel(j + 1, -XCHANGE, 0);
+					box.addOffsetRectangle(j + 1, -XCHANGE, 0);
 					currentLeftCount += XCHANGE;
 					paintBox();
 					if (currentLeftCount >= width)
 					{
 						int excess = currentLeftCount - width;
-						box.addOffsetRectangel(j, excess, 0);
+						box.addOffsetRectangle(j + 1, excess, 0);
 						paintBox();
 						leftFlag = 0;
 						upFlag = 1;
@@ -155,13 +217,13 @@ public class SortingFunctions extends MyPanel
 				// moving the next block up
 				else if (upFlag == 1)
 				{
-					box.addOffsetRectangel(j + 1, 0, -YCHANGE);
+					box.addOffsetRectangle(j + 1, 0, -YCHANGE);
 					currentUpCount += YCHANGE;
 					paintBox();
 					if (currentUpCount >= DOWN)
 					{
 						int excess = currentUpCount - DOWN;
-						box.addOffsetRectangel(j, 0, excess);
+						box.addOffsetRectangle(j, 0, excess);
 						paintBox();
 						
 						// Reflecting the same procedure internally
@@ -170,15 +232,26 @@ public class SortingFunctions extends MyPanel
 						
 						box.setRectangle(currRect, j + 1);
 						box.setRectangle(nextRect, j);
-						
 						upFlag = 0;
+						delayFlag2 = 1;
+						delay2 = 0;
+						
+					}
+				}
+				else if (delayFlag2 == 1)
+				{
+					delay2++;
+					if (delay2 > DELAY)
+					{
+						delayFlag2 = 0;
 						codeFlag = 1;
+						box.getRectangle(j).setColor(BASE_COLOR);
+						box.getRectangle(j + 1).setColor(BASE_COLOR);
 						j++;
 					}
 				}
 			}
 		};
-		
 		timer.addActionListener(action);
 		timer.start();
 		return timer;
@@ -232,30 +305,43 @@ public class SortingFunctions extends MyPanel
 			// Moving the current rectangle left
 			int leftFlag = 0;
 			
+			// for halting for some time
+			int delay1 = 0;
+			
+			// code for delay
+			int delayFlag1 = 0;
+			
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				// step zero check whether to continue the algorithm or not
 				if (i >= size)
+				{
+					System.out.println("insertion sort terminated");
 					timer.stop();
-				
+					box.setColorRange(0, box.getNumber() - 1, END_COLOR);
+					paintBox();
+				}
 				// Step one find a suitable index where to place the current rectangle
 				else if (codeFlag == 1)
 				{
 					Rectangle currRect = box.getRectangle(i);
+					currRect.setColor(FOCUS_COLOR1);
 					Rectangle scanRect;
 					for (k = i - 1; k >= 0; k--)
 					{
 						scanRect = box.getRectangle(k);
+						scanRect.setColor(FOCUS_COLOR2);
 						if (scanRect.getData() > currRect.getData())
-							continue;
-						else
 						{
-							// getting the index of first rectangle to move to the left
-							index = i - 1;
-							break;
+							continue;
 						}
+						else
+							break;
 					}
+					
+					// getting the index of first rectangle to move to the left
+					index = i - 1;
 					codeFlag = 0;
 					downFlag = 1;
 					currentDownCount = 0;
@@ -264,13 +350,14 @@ public class SortingFunctions extends MyPanel
 				//moving the current rectangle down
 				else if (downFlag == 1)
 				{
-					box.addOffsetRectangel(i, 0, YCHANGE);
+					box.addOffsetRectangle(i, 0, YCHANGE);
 					paintBox();
 					currentDownCount += YCHANGE;
 					if (currentDownCount >= DOWN)
 					{
+						System.out.println("DOWN i " + i + " k " + k);
 						int excess = currentDownCount - DOWN;
-						box.addOffsetRectangel(i, 0, -excess);
+						box.addOffsetRectangle(i, 0, -excess);
 						paintBox();
 						downFlag = 0;
 						rightBlockFlag = 1;
@@ -283,6 +370,7 @@ public class SortingFunctions extends MyPanel
 				{
 					if (index <= k)
 					{
+						System.out.println("rightEnd i " + i + " k " + k);
 						rightBlockFlag = 0;
 						leftFlag = 1;
 						currentLeftCount = 0;
@@ -298,14 +386,14 @@ public class SortingFunctions extends MyPanel
 				// moving each rectangle of the block to the right
 				else if (rightFlag == 1)
 				{
-					box.addOffsetRectangel(index, XCHANGE, 0);
+					box.addOffsetRectangle(index, XCHANGE, 0);
 					paintBox();
 					indexRightCount += XCHANGE;
 					
 					if (indexRightCount >= width)
 					{
 						int excess = indexRightCount - width;
-						box.addOffsetRectangel(index, -excess, 0);
+						box.addOffsetRectangle(index, -excess, 0);
 						paintBox();
 						rightFlag = 0;
 						rightBlockFlag = 1;
@@ -316,13 +404,14 @@ public class SortingFunctions extends MyPanel
 				// moving the current rectangle to the left
 				else if (leftFlag == 1)
 				{
-					box.addOffsetRectangel(i, -XCHANGE, 0);
+					box.addOffsetRectangle(i, -XCHANGE, 0);
 					currentLeftCount += XCHANGE;
 					paintBox();
 					if (currentLeftCount >= width * (i - 1 - k))
 					{
+						System.out.println("Left End i " + i + " k " + k);
 						int excess = currentLeftCount - width * (i - 1 - k);
-						box.addOffsetRectangel(i, excess, 0);
+						box.addOffsetRectangle(i, excess, 0);
 						paintBox();
 						leftFlag = 0;
 						upFlag = 1;
@@ -333,18 +422,21 @@ public class SortingFunctions extends MyPanel
 				// moving the current rectangle up
 				else if (upFlag == 1)
 				{
-					box.addOffsetRectangel(i, 0, -YCHANGE);
+					box.addOffsetRectangle(i, 0, -YCHANGE);
 					currentUpCount += YCHANGE;
 					paintBox();
 					if (currentUpCount >= DOWN)
 					{
+						System.out.println("UP End i " + i + " k " + k);
 						int excess = currentUpCount - DOWN;
-						box.addOffsetRectangel(i, 0, excess);
+						box.addOffsetRectangle(i, 0, excess);
 						paintBox();
 						
 						// Reflecting the changes internally
 						
 						Rectangle currRect = box.getRectangle(i);
+						currRect.setColor(FOCUS_COLOR2);
+						paintBox();
 						Rectangle scanRect;
 						int t;
 						for (t = i - 1; t >= 0; t--)
@@ -356,8 +448,18 @@ public class SortingFunctions extends MyPanel
 								break;
 						}
 						box.setRectangle(currRect, t + 1);
-						
+						delayFlag1 = 1;
 						upFlag = 0;
+						delay1 = 0;
+						upFlag = 0;
+					}
+				}
+				else if (delayFlag1 == 1)
+				{
+					delay1++;
+					if (delay1 >= DELAY)
+					{
+						delayFlag1 = 0;
 						codeFlag = 1;
 						i++;
 					}
@@ -425,8 +527,11 @@ public class SortingFunctions extends MyPanel
 			{
 				// step zero check whether to continue the algorithm or not
 				if (i >= size)
+				{
 					timer.stop();
-				
+					box.setBaseColor(END_COLOR);
+					paintBox();
+				}
 				// Step one find a suitable index where to place the current rectangle
 				else if (codeFlag == 1)
 				{
@@ -444,6 +549,7 @@ public class SortingFunctions extends MyPanel
 							index = k - 1;
 						}
 					}
+					currRect.setColor(FOCUS_COLOR2);
 					codeFlag = 0;
 					downFlag = 1;
 					currentDownCount = 0;
@@ -452,13 +558,13 @@ public class SortingFunctions extends MyPanel
 				// moving the smallest rectangle down
 				else if (downFlag == 1)
 				{
-					box.addOffsetRectangel(smallest, 0, YCHANGE);
+					box.addOffsetRectangle(smallest, 0, YCHANGE);
 					paintBox();
 					currentDownCount += YCHANGE;
 					if (currentDownCount >= DOWN)
 					{
 						int excess = currentDownCount - DOWN;
-						box.addOffsetRectangel(smallest, 0, -excess);
+						box.addOffsetRectangle(smallest, 0, -excess);
 						paintBox();
 						if (smallest == i)
 						{
@@ -495,14 +601,14 @@ public class SortingFunctions extends MyPanel
 				// moving each rectangle in the block to the right
 				else if (rightFlag == 1)
 				{
-					box.addOffsetRectangel(index, XCHANGE, 0);
+					box.addOffsetRectangle(index, XCHANGE, 0);
 					paintBox();
 					indexRightCount += XCHANGE;
 					
 					if (indexRightCount >= width)
 					{
 						int excess = indexRightCount - width;
-						box.addOffsetRectangel(index, -excess, 0);
+						box.addOffsetRectangle(index, -excess, 0);
 						paintBox();
 						rightFlag = 0;
 						rightBlockFlag = 1;
@@ -513,13 +619,13 @@ public class SortingFunctions extends MyPanel
 				// moving the smallest rectangle to the left
 				else if (leftFlag == 1)
 				{
-					box.addOffsetRectangel(smallest, -XCHANGE, 0);
+					box.addOffsetRectangle(smallest, -XCHANGE, 0);
 					currentLeftCount += XCHANGE;
 					paintBox();
 					if (currentLeftCount >= width * (smallest - i))
 					{
 						int excess = currentLeftCount - width * (smallest - i);
-						box.addOffsetRectangel(smallest, excess, 0);
+						box.addOffsetRectangle(smallest, excess, 0);
 						paintBox();
 						leftFlag = 0;
 						upFlag = 1;
@@ -530,13 +636,13 @@ public class SortingFunctions extends MyPanel
 				// moving the smallest rectangle up
 				else if (upFlag == 1)
 				{
-					box.addOffsetRectangel(smallest, 0, -YCHANGE);
+					box.addOffsetRectangle(smallest, 0, -YCHANGE);
 					currentUpCount += YCHANGE;
 					paintBox();
 					if (currentUpCount >= DOWN)
 					{
 						int excess = currentUpCount - DOWN;
-						box.addOffsetRectangel(smallest, 0, excess);
+						box.addOffsetRectangle(smallest, 0, excess);
 						paintBox();
 						Rectangle smallestRect = box.getRectangle(smallest);
 						
@@ -565,7 +671,6 @@ public class SortingFunctions extends MyPanel
 	public void mergeSort()
 	{
 		final Timer timer = new Timer(TIMER_SPEED, this);
-		final int width = super.getRectangleSpace();
 		final int size = super.box.getArrayRectangle().length;
 		
 		ActionListener action = new ActionListener()
@@ -574,20 +679,23 @@ public class SortingFunctions extends MyPanel
 			int leftStart = 0;
 			int rightEnd = 0;
 			int mid = 0;
-			int subCodeFlag = 1;
+			int mergeSortDelayFlag1 = 0;
+			int mergeSortdelay1 = 0;
+			int mergeSortCodeFlag = 1;
 			
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				
-				System.out.println("Timer1 running");
 				// step zero check whether to continue the algorithm or not
-				if (currentSize >= 12)
-					timer.stop();
-				// Step one find a suitable index where to place the current rectangle
-				else if (subCodeFlag == 1)
+				if (currentSize >= size)
 				{
-					if (leftStart >= 12 - 1)
+					System.out.println("MERGESORT END");
+					timer.stop();
+				}
+				// Step one find a suitable index where to place the current rectangle
+				else if (mergeSortCodeFlag == 1)
+				{
+					if (leftStart >= size - 1)
 					{
 						currentSize = currentSize * 2;
 						leftStart = 0;
@@ -595,30 +703,55 @@ public class SortingFunctions extends MyPanel
 					else
 					{
 						mid = leftStart + currentSize - 1;
-						if (leftStart + 2 * currentSize - 1 >= 12 - 1)
-							rightEnd = 12 - 1;
+						if (leftStart + 2 * currentSize - 1 >= size - 1)
+							rightEnd = size - 1;
 						else
 							rightEnd = leftStart + 2 * currentSize - 1;
-						timer.stop();
-						System.out.println("Timer1 Stop");
-						//merge(leftStart, mid, rightEnd, timer);
-						leftStart += 2 * currentSize;
+						box.setBaseColor(BASE_COLOR);
+						paintBox();
+						mergeSortDelayFlag1 = 1;
+						mergeSortdelay1 = 0;
+						mergeSortCodeFlag = 0;
 					}
 				}
+				else if (mergeSortDelayFlag1 == 1)
+				{
+					mergeSortdelay1++;
+					if (mergeSortdelay1 >= DELAY)
+					{
+						merge(leftStart, mid, rightEnd, timer);
+						mergeSortCodeFlag = 1;
+						mergeSortDelayFlag1 = 0;
+						leftStart += 2 * currentSize;
+						timer.stop();
+					}
+				}
+				
 			}
 		};
 		timer.addActionListener(action);
 		timer.start();
 	}
 	
-	public void merge(final int l, final int m, final int r)
+	public void merge(final int l, final int m, final int r, final Timer mergeSortTimer)
 	{
 		final Timer timer = new Timer(TIMER_SPEED, this);
+		final int width = super.getRectangleSpace();
+		box.setBaseColor(BASE_COLOR);
+		box.setColorRange(l, m, BLOCK_COLOR1);
+		box.setColorRange(m + 1, r, BLOCK_COLOR2);
+		paintBox();
 		ActionListener action = new ActionListener()
 		{
-			int i = 0;
-			int j = 0;
+			// current index of the first array
+			int i = l;
+			// current index of first element of second array 
+			int j = m + 1;
+			
+			// index is used to shift all the element that are between i and j (including i) 
 			int index = 0;
+			
+			// rest of it has the usual meaning
 			int currentDownCount = 0;
 			int indexRightCount = 0;
 			int currentLeftCount = 0;
@@ -628,61 +761,153 @@ public class SortingFunctions extends MyPanel
 			int rightBlockFlag = 0;
 			int downFlag = 0;
 			int upFlag = 0;
-			int LeftMainFlag = 0;
-			int width = 25;
-			int x=0;
+			int leftFlag = 0;
+			int delay1 = 0;
+			int delayFlag1 = 0;
+			int delay2 = 0;
+			int delayFlag2 = 0;
+			int colorFlag1 = 1;
+			int colorDelayFlag1 = 0;
+			int colorDelay1 = 0;
+			int colorFlag2 = 1;
+			int colorDelayFlag2 = 0;
+			int colorDelay2 = 0;
 			
 			//TODO the stopping condition is wrong 
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				System.out.println("Timer2 running");
 				// step zero check whether to continue the algorithm or not
-				if (i + l >= j + m + 1 || m + 1 + j > r)
+				if (j > r)
 				{
-					
-					timer.stop();
-					System.out.println("Timer2 stopping");
-					//mergeSortTimer.start();
+					if (i >= j)
+					{
+						mergeSortTimer.start();
+						timer.stop();
+					}
+					else if (colorFlag1 == 1)
+					{
+						box.getRectangle(i).setColor(END_COLOR);
+						paintBox();
+						colorDelay1 = 0;
+						colorDelayFlag1 = 1;
+						colorFlag1 = 0;
+					}
+					else if (colorDelayFlag1 == 1)
+					{
+						colorDelay1++;
+						if (colorDelay1 >= DELAY)
+						{
+							i++;
+							colorDelayFlag1 = 0;
+							colorFlag1 = 1;
+							colorDelay1 = 0;
+						}
+					}
 				}
-				// Step one find a suitable index where to place the current rectangle
+				
+				else if (i >= j)
+				{
+					if (j > r)
+					{
+						mergeSortTimer.start();
+						timer.stop();
+					}
+					else if (colorFlag2 == 1)
+					{
+						box.getRectangle(j).setColor(END_COLOR);
+						paintBox();
+						colorDelay2 = 0;
+						colorDelayFlag2 = 1;
+						colorFlag2 = 0;
+					}
+					else if (colorDelayFlag2 == 1)
+					{
+						colorDelay2++;
+						if (colorDelay2 >= DELAY)
+						{
+							j++;
+							colorDelayFlag2 = 0;
+							colorFlag2 = 1;
+							colorDelay2 = 0;
+						}
+					}
+				}
+				// Step one Check whether a[i] <= a[j]
 				else if (codeFlag == 1)
 				{
-					Rectangle currRect = box.getRectangle(l + i);
-					Rectangle scanRect = box.getRectangle(m + 1 + j);
-					if (currRect.getData() < scanRect.getData())
+					Rectangle currRect = box.getRectangle(i);
+					Rectangle scanRect = box.getRectangle(j);
+					currRect.setColor(FOCUS_COLOR1);
+					scanRect.setColor(FOCUS_COLOR2);
+					paintBox();
+					delayFlag2 = 1;
+					codeFlag = 0;
+					delay2 = 0;
+				}
+				
+				else if (delayFlag2 == 1)
+				{
+					delay2++;
+					if (delay2 >= DELAY)
 					{
-						i++;
-						x++;
-					}
-					
-					else
-					{
-						codeFlag = 0;
-						downFlag = 1;
-						currentDownCount = 0;
+						Rectangle currRect = box.getRectangle(i);
+						Rectangle scanRect = box.getRectangle(j);
+						if (currRect.getData() < scanRect.getData())
+						{
+							box.getRectangle(i).setColor(END_COLOR);
+							paintBox();
+							delay1 = 0;
+							delayFlag2 = 0;
+							delayFlag1 = 1;
+						}
+						else
+						{
+							box.getRectangle(j).setColor(END_COLOR);
+							paintBox();
+							delayFlag2 = 0;
+							downFlag = 1;
+							currentDownCount = 0;
+						}
 					}
 				}
+				else if (delayFlag1 == 1)
+				{
+					delay1++;
+					if (delay1 >= DELAY)
+					{
+						codeFlag = 1;
+						delayFlag1 = 0;
+						i++;
+					}
+				}
+				
+				// Moving the first rectangle on right down (if it was smaller than the first one on the left)
 				else if (downFlag == 1)
 				{
-					box.addOffsetRectangel(m + j + 1, 0, 1);
+					box.addOffsetRectangle(j, 0, YCHANGE);
 					paintBox();
-					currentDownCount++;
-					if (currentDownCount >= 100)
+					currentDownCount += YCHANGE;
+					if (currentDownCount >= DOWN)
 					{
+						int excess = currentDownCount - DOWN;
+						box.addOffsetRectangle(j, 0, -excess);
+						paintBox();
 						downFlag = 0;
 						rightBlockFlag = 1;
 						indexRightCount = 0;
-						index = m + j;
+						index = j - 1;
 					}
 				}
-				/////////////////////////////////////////////
+				
+				// moving each of the rectangles in the block to the right(between the two smallest rectangle on both side)
+				// including the first rectangle
 				else if (rightBlockFlag == 1)
 				{
-					if (index < l + i)
+					if (index < i)
 					{
 						rightBlockFlag = 0;
-						LeftMainFlag = 1;
+						leftFlag = 1;
 						currentLeftCount = 0;
 					}
 					else
@@ -693,28 +918,35 @@ public class SortingFunctions extends MyPanel
 					}
 				}
 				
+				// moving a rectangle in the block to the right
 				else if (rightFlag == 1)
 				{
-					box.addOffsetRectangel(index, 1, 0);
+					box.addOffsetRectangle(index, XCHANGE, 0);
 					paintBox();
-					indexRightCount++;
-					
+					indexRightCount += XCHANGE;
 					if (indexRightCount >= width)
 					{
+						int excess = indexRightCount - width;
+						box.addOffsetRectangle(index, -excess, 0);
+						paintBox();
 						rightFlag = 0;
 						rightBlockFlag = 1;
 						index--;
 					}
 				}
-				//////////////////////////////////////////
-				else if (LeftMainFlag == 1)
+				
+				else if (leftFlag == 1)
 				{
-					box.addOffsetRectangel(m + j + 1, -1, 0);
-					currentLeftCount++;
+					box.addOffsetRectangle(j, -XCHANGE, 0);
+					currentLeftCount += XCHANGE;
 					paintBox();
-					if (currentLeftCount >= width * (m + j + 1 - (l + i)))
+					if (currentLeftCount >= width * (j - i))
 					{
-						LeftMainFlag = 0;
+						int excess = currentLeftCount - width * (j - i);
+						box.addOffsetRectangle(j, excess, 0);
+						paintBox();
+						
+						leftFlag = 0;
 						upFlag = 1;
 						currentUpCount = 0;
 					}
@@ -722,46 +954,33 @@ public class SortingFunctions extends MyPanel
 				
 				else if (upFlag == 1)
 				{
-					box.addOffsetRectangel(m + j + 1, 0, -1);
-					currentUpCount++;
+					box.addOffsetRectangle(j, 0, -YCHANGE);
+					currentUpCount += YCHANGE;
 					paintBox();
-					if (currentUpCount >= 100)
+					if (currentUpCount >= DOWN)
 					{
+						int excess = currentUpCount - DOWN;
+						box.addOffsetRectangle(j, 0, excess);
+						paintBox();
 						
-						Rectangle smallestRect = box.getRectangle(l + i);
-						Rectangle scanRect = box.getRectangle(m + j + 1);
-						if (smallestRect.getData() <= scanRect.getData())
-							;
-						//System.out.println("\n\ni value " + box.getRectangle(i).getData());
-						else
+						Rectangle smallestRect = box.getRectangle(j);
+						
+						for (int t = j - 1; t >= i; t--)
 						{
-							smallestRect = scanRect;
-							int t;
-							for (t = m + j; t >= i + l; t--)
-							{
-								scanRect = box.getRectangle(t);
-								//System.out.println("t value " + scanRect.getData());
-								
-								//if (scanRect.getData() > currRect.getData())
-								
-								box.setRectangle(box.getRectangle(t), t + 1);
-							}
-							box.setRectangle(smallestRect, i + l);
-							j++;
+							box.setRectangle(box.getRectangle(t), t + 1);
 						}
-						System.out.println("\nPass " + i + j + "\n");
-						for (int j = 0; j < box.getArrayRectangle().length; j++)
-						{
-							System.out.println("data " + box.getRectangle(j).getData() + " Index " + j);
-						}
+						box.setRectangle(smallestRect, i);
 						upFlag = 0;
 						codeFlag = 1;
+						j++;
 						i++;
 					}
 				}
+				
 			}
 		};
 		timer.addActionListener(action);
 		timer.start();
 	}
+	
 }
