@@ -57,9 +57,9 @@ public class BHPanel extends JPanel implements ActionListener
 						bh.binaryHeap.add(n);
 						bh.heapSize++;
 						if (bh.heapSize%2==0) 
-							temp.rightChild = n;
-						else
 							temp.leftChild = n;
+						else
+							temp.rightChild = n;
 						temp = n;
 
 						temp.changeEdgeColor(Color.yellow);
@@ -86,12 +86,12 @@ public class BHPanel extends JPanel implements ActionListener
 							}
 							else
 							{
-								bh.swap (temp, temp.parent);
-								temp = temp.parent;
+								swap (temp.parent, temp, timer);
 								temp.changeNodeBackgroundColor(Color.yellow);
 								temp.changeNodeColor(Color.yellow);
 								temp.changeTextColor(Color.black);
 								flag = !flag;
+								timer.stop();
 							}
 						}
 						else 
@@ -149,9 +149,11 @@ public class BHPanel extends JPanel implements ActionListener
 					}
 					else
 					{
-						bh.swap (temp, bh.binaryHeap.get(bh.heapSize-1));
+						swap (temp, bh.binaryHeap.get(bh.heapSize-1), timer);
+//						bh.swap (temp, bh.binaryHeap.get(bh.heapSize-1));
 						flag = !flag;
 						swapped = true;
+						timer.stop();
 					}
 				}
 
@@ -168,6 +170,7 @@ public class BHPanel extends JPanel implements ActionListener
 							n.parent.rightChild = null;
 					}
 					bh.heapSize--;
+					temp = bh.binaryHeap.get(0);
 					remove = true;
 				}
 
@@ -190,8 +193,9 @@ public class BHPanel extends JPanel implements ActionListener
 							}
 							else
 							{
-								bh.swap (temp, n);
+								swap (temp, n, timer);
 								temp = temp.rightChild;
+								timer.stop();
 							}
 						}
 						else
@@ -210,8 +214,9 @@ public class BHPanel extends JPanel implements ActionListener
 							}
 							else
 							{
-								bh.swap (temp, n);
+								swap (temp, n ,timer);
 								temp = temp.leftChild;
+								timer.stop();
 							}
 						}
 						else
@@ -224,18 +229,15 @@ public class BHPanel extends JPanel implements ActionListener
 						{
 							if (!flag)
 							{
-//								n.changeNodeColor(Color.yellow);
-//								n.changeNodeBackgroundColor(Color.yellow);
-								n.changeEdgeColor(Color.yellow);
 								flag = !flag;
 							}
 							else
 							{
 								n.changeNodeColor(Color.yellow);
 								n.changeNodeBackgroundColor(Color.yellow);
-								bh.swap (temp, n);
-								temp = n;
+								swap (temp, n, timer);
 								flag = !flag;
+								timer.stop();
 							}
 						}
 						else
@@ -257,8 +259,8 @@ public class BHPanel extends JPanel implements ActionListener
 		timer.start();
 		
 	}
-
-	public void move (final Node n1, final Node n2)
+	
+	public void swap (final Node n1, final Node n2, final Timer timer)
 	{
 		final int x1 = n1.x;
 		final int y1 = n1.y;
@@ -267,7 +269,82 @@ public class BHPanel extends JPanel implements ActionListener
 		final double deltaX = (x2-x1)/10.0;
 		final double deltaY = (y2-y1)/10.0;
 
-		final Timer timer = new Timer(50, this);
+		int i1=-1;
+		int i2=-1;
+		for (int i=0; i<bh.heapSize; i++)
+		{
+			if (bh.binaryHeap.get(i) == n1)
+				i1 = i;
+			if (bh.binaryHeap.get(i) == n2)
+				i2 = i;
+		}
+
+		bh.binaryHeap.set(i1, n2);
+		bh.binaryHeap.set(i2, n1);
+
+		Node p1 = n1.parent;
+		Node l1 = n1.leftChild;
+		Node r1 = n1.rightChild;
+		int h1 = n1.height;
+		boolean f = false;
+		if (p1 != null)
+			f = (n1 == p1.leftChild);
+		boolean f2 = (n1 == n2.parent);
+		boolean f3 = (n2 == n1.leftChild);
+		
+		if (!f2)
+		{
+			n1.parent = n2.parent;
+			if (n2.parent != null)
+			{
+				if (n2 == n2.parent.leftChild)
+					n2.parent.leftChild = n1;
+				else
+					n2.parent.rightChild = n1;
+			}
+		}
+		else
+		{
+			n1.parent = n2;
+		}
+		n1.leftChild = n2.leftChild;
+		if (n1.leftChild != null)	n1.leftChild.parent = n1;
+		n1.rightChild = n2.rightChild;
+		if (n1.rightChild != null)	n1.rightChild.parent = n1;
+		n1.height = n2.height;
+
+		n2.parent = p1;
+		if (p1 != null)
+		{
+			if (f)	p1.leftChild = n2;
+			else	p1.rightChild = n2;
+		}
+		if (!f2)
+		{
+			n2.leftChild = l1;
+			if (n2.leftChild != null)	n2.leftChild.parent = n2;
+			n2.rightChild = r1;
+			if (n2.rightChild != null)	n2.rightChild.parent = n2;
+		}
+		else
+		{
+			if (f3)
+			{
+				n2.rightChild = r1;
+				if (r1 != null)	r1.parent = n2;
+				n2.leftChild = n1;
+			}
+			else
+			{
+				n2.leftChild = l1;
+				if (l1 != null)	l1.parent = n2;
+				n2.rightChild = n1;
+			}
+		}
+		n2.height = h1;
+
+
+		final Timer swapTimer = new Timer(100, this);
 
 		ActionListener action = new ActionListener()
 		{
@@ -289,14 +366,16 @@ public class BHPanel extends JPanel implements ActionListener
 					n1.y = y2;
 					n2.x = x1;
 					n2.y = y1;
-					timer.stop();
+
+					swapTimer.stop();
+					timer.start();
 				}
 				paintBox();
 			}
 		};
 		
-		timer.addActionListener(action);
-		timer.start();
+		swapTimer.addActionListener(action);
+		swapTimer.start();
 	}
 	
 	public void paintBox()

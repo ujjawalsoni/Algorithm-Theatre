@@ -444,8 +444,7 @@ public class GUI
 		developers.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		final ArrayList<Integer> list = new ArrayList<Integer>();
-		int[] a = {52,34,22,46,26,97,54,76,19,44,67,84,25,4,30,99,98,40,39,33,43,50,55};
-//		int[] a = {43,12,34,22,46,76,9,90,70,17,25,8};
+		int[] a = {52,34,22,46,26,97,54,76,19,44,67,84,25,4,30,99,98,40,39,33,43,50,55,10,15,12};
 		for (int i=0; i<a.length; i++)
 			list.add(a[i]);
 //		BinarySearchTree b = new BinarySearchTree(list);
@@ -458,14 +457,10 @@ public class GUI
 		p.setVisible (true);
 		p.setBounds(0,0,1213,420);
 		mainTopPanel.add (p);
+
 //		p.search(84);
 //		p.insert(2);
-//		p.deleteMin();
-		p.move(p.bh.binaryHeap.get(0), p.bh.binaryHeap.get(1));
-//		p.paintBox();
-//		p.print_bfm();
-//		System.out.println(p.delete(26));
-//		p.print_bfm();
+		p.deleteMin();
 //		p.delete(76);
 //		p.bubbleSort();
 //		p.selectionSort();

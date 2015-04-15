@@ -36,6 +36,18 @@ public class Node
 		textColor = Color.black;
 		height = h;
 	}
+	
+	public void printNodeDetails ()
+	{
+		System.out.println("Data: " + data);
+		System.out.println("x: " + x);
+		System.out.println("y: " + y);
+		System.out.println("Parent: " + (parent==null ? "null" : parent.data));
+		System.out.println("Left: " + (leftChild==null ? "null" : leftChild.data));
+		System.out.println("Right: " + (rightChild==null ? "null" : rightChild.data));
+		System.out.println("Height: " + height);
+		System.out.println();
+	}
 
 	public void drawNode (Graphics g)
 	{

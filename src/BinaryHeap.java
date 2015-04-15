@@ -52,7 +52,7 @@ public class BinaryHeap
 		for (int i=0; i<heapSize; i++)
 		{
 			Node n = binaryHeap.get(i);
-			System.out.printf ("%d " + n.data);
+			n.printNodeDetails();
 		}
 		System.out.println();
 	}
