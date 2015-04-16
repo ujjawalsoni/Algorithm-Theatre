@@ -49,7 +49,7 @@ public class GUI
 	 * ** mainTopPanel is to show the animation
 	 * ** mainBottomPanel contains the labels and gui for various operations
 	 */
-	
+
 	private JFrame mainFrame;
 	private Container mainPane;
 
@@ -93,7 +93,7 @@ public class GUI
 		rightWhiteArrow = new ImageIcon ("Images/arrow_white_right.png");
 		leftBlackArrow = new ImageIcon ("Images/arrow_black_left.png");
 		leftWhiteArrow = new ImageIcon ("Images/arrow_white_left.png");
-		
+
 		mainFrame = new JFrame ("Algorithm Theatre");
 		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -447,12 +447,12 @@ public class GUI
 		int[] a = {52,34,22,46,26,97,54,76,19,44,67,84,25,4,30,99,98,40,39,33,43,50,55,10,15,12};
 		for (int i=0; i<a.length; i++)
 			list.add(a[i]);
-//		BinarySearchTree b = new BinarySearchTree(list);
-		BinaryHeap b = new BinaryHeap (list);
+		BinarySearchTree b = new BinarySearchTree(list);
+//		BinaryHeap b = new BinaryHeap (list);
 
-//		SortingFunctions p = new SortingFunctions(list);
+		SortingFunctions p = new SortingFunctions(list);
 //		BSTPanel p = new BSTPanel(b);
-		BHPanel p = new BHPanel(b);
+//		BHPanel p = new BHPanel(b);
 		p.setBackground(Color.white);
 		p.setVisible (true);
 		p.setBounds(0,0,1213,420);
@@ -460,13 +460,13 @@ public class GUI
 
 //		p.search(84);
 //		p.insert(2);
-		p.deleteMin();
-//		p.delete(76);
+//		p.deleteMin();
+//		p.delete(54);
 //		p.bubbleSort();
 //		p.selectionSort();
-//		p.insertionSort();
+		p.insertionSort();
 //		p.mergeSort();
-		
+
 		mainFrame.pack();
 	    mainFrame.setVisible(true);
 

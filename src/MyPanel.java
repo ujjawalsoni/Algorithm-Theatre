@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
-import javax.swing.Timer;
 
 
 class MyPanel extends JPanel implements ActionListener
