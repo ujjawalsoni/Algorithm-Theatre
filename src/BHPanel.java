@@ -18,7 +18,7 @@ public class BHPanel extends JPanel implements ActionListener
 		bh = b;
 	}
 
-	public void insert (final int val)
+	public Timer insert (final int val)
 	{
 		final Timer timer = new Timer(TIMER_SPEED, this);
 		
@@ -105,6 +105,7 @@ public class BHPanel extends JPanel implements ActionListener
 				{
 					unColorPath(bh.binaryHeap.get(bh.heapSize-1));
 					timer.stop();
+//					bh.print();
 				}
 				
 				paintBox();
@@ -113,10 +114,10 @@ public class BHPanel extends JPanel implements ActionListener
 		
 		timer.addActionListener(action);
 		timer.start();
-		
+		return timer;
 	}
 
-	public void deleteMin ()
+	public Timer deleteMin ()
 	{
 		final Timer timer = new Timer(TIMER_SPEED, this);
 
@@ -169,6 +170,7 @@ public class BHPanel extends JPanel implements ActionListener
 						else
 							n.parent.rightChild = null;
 					}
+					bh.binaryHeap.remove(bh.heapSize-1);
 					bh.heapSize--;
 					temp = bh.binaryHeap.get(0);
 					remove = true;
@@ -249,6 +251,7 @@ public class BHPanel extends JPanel implements ActionListener
 				{
 					unColorPath(temp);
 					timer.stop();
+//					bh.print();
 				}
 				
 				paintBox();
@@ -257,7 +260,7 @@ public class BHPanel extends JPanel implements ActionListener
 		
 		timer.addActionListener(action);
 		timer.start();
-		
+		return timer;
 	}
 	
 	public void swap (final Node n1, final Node n2, final Timer timer)

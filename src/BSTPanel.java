@@ -22,7 +22,7 @@ class BSTPanel extends JPanel implements ActionListener
 		bst = b;
 	}
 	
-	public void search (final int val)
+	public Timer search (final int val)
 	{
 		final Timer timer = new Timer(TIMER_SPEED, this);
 		
@@ -72,10 +72,10 @@ class BSTPanel extends JPanel implements ActionListener
 		
 		timer.addActionListener(action);
 		timer.start();
-		
+		return timer;
 	}
 	
-	public void insert (final int val)
+	public Timer insert (final int val)
 	{
 		final Timer timer = new Timer(TIMER_SPEED, this);
 		
@@ -163,10 +163,10 @@ class BSTPanel extends JPanel implements ActionListener
 		
 		timer.addActionListener(action);
 		timer.start();
-		
+		return timer;
 	}
 
-	public boolean delete (final int val)
+	public Timer delete (final int val)
 	{
 		final Timer timer = new Timer(TIMER_SPEED, this);
 		
@@ -321,7 +321,7 @@ class BSTPanel extends JPanel implements ActionListener
 
 		timer.addActionListener(action);
 		timer.start();
-		return true;
+		return timer;
 	}
 
 	public void print_bfm ()

@@ -9,7 +9,7 @@ import javax.swing.Timer;
 
 public class SortingFunctions extends MyPanel
 {
-	
+
 	private static final int TIMER_SPEED = 25;
 	private static final int XCHANGE = 4;
 	private static final int YCHANGE = 4;
@@ -34,6 +34,8 @@ public class SortingFunctions extends MyPanel
 	public Timer bubbleSort()
 	{
 		box.setBaseColor(BASE_COLOR);
+		box.setBaseX(300);
+		box.setBaseY(300);
 		box.resetArrayRectangle();
 		paintBox();
 		final Timer timer = new Timer(TIMER_SPEED, this);
@@ -258,7 +260,7 @@ public class SortingFunctions extends MyPanel
 			}
 		};
 		timer.addActionListener(action);
-		timer.start();
+		
 		return timer;
 	}
 	
@@ -472,7 +474,7 @@ public class SortingFunctions extends MyPanel
 			}
 		};
 		timer.addActionListener(action);
-		timer.start();
+		
 		return timer;
 	}
 	
@@ -669,7 +671,7 @@ public class SortingFunctions extends MyPanel
 			}
 		};
 		timer.addActionListener(action);
-		timer.start();
+		
 		return timer;
 	}
 	
@@ -1015,7 +1017,7 @@ public class SortingFunctions extends MyPanel
 			}
 		};
 		timer.addActionListener(action);
-		timer.start();
+		
 		return timer;
 	}
 	
@@ -1595,7 +1597,7 @@ public class SortingFunctions extends MyPanel
 		};
 		
 		timer.addActionListener(action);
-		timer.start();
+		
 		return timer;
 	}
 }

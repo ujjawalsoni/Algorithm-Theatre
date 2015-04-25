@@ -3,23 +3,15 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
+import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.Ellipse2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -27,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 import javax.swing.WindowConstants;
 
 public class GUI
@@ -59,7 +52,6 @@ public class GUI
 	private JPanel topPanel;
 	private JPanel bottomPanel;
 
-	private JButton topLeft;
 	private JButton leftBottom;
 	private JButton rightMiddle;
 	private JButton rightBottom;
@@ -67,24 +59,45 @@ public class GUI
 
 	private JPanel mainTopPanel;
 	private JPanel mainBottomPanel;
-	private JLabel codeTraceLabel;
+	private JPanel codeTracePanel;
+	private JLabel[] ctl;
 	private JLabel statusLabel;
-	
+
 	private JButton createList;
-	private JButton sortList;
 	private JTextField userInputField;
 	private JButton goCreateList;
+
+	private JButton sortList;
 	private JButton goSortList;
+
+	private JTextField searchField;
+	
+	private JButton insertElement;
+	private JTextField insertField;
+	private JButton goInsertElement;
+
+	private JButton deleteElement;
+	private JTextField deleteField;
+	private JButton goDeleteElement;
+
+	private JButton back;
+	private JButton currentAlgo;
 
 	private ImageIcon rightBlackArrow;
 	private ImageIcon rightWhiteArrow;
 	private ImageIcon leftBlackArrow;
 	private ImageIcon leftWhiteArrow;
+	
+	protected BSTPanel bstPanel;
+	protected BHPanel bhPanel;
 
+	int instruction;
+	Timer globalTimer;
 
-	public GUI ()
+	public GUI (boolean v)
 	{
 		initialize();
+		mainFrame.setVisible(v);
 	}
 	
 	public void initialize ()
@@ -124,6 +137,7 @@ public class GUI
 		topPanel = new JPanel ();
 	    topPanel.setPreferredSize(new Dimension(1000, 40));
 	    topPanel.setBackground(Color.black);
+	    topPanel.setLayout(null);
 		mainPane.add(topPanel, BorderLayout.PAGE_START);
 
 	    bottomPanel = new JPanel ();
@@ -149,20 +163,32 @@ public class GUI
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				int i = instruction;
 				if (createList.isVisible())
 				{
 					leftBottom.setIcon(rightBlackArrow);
-					createList.setVisible (false);
+					createList.setVisible(false);
 					userInputField.setVisible(false);
 					goCreateList.setVisible(false);
 					sortList.setVisible(false);
 					goSortList.setVisible(false);
+					insertElement.setVisible(false);
+					deleteElement.setVisible(false);
 				}
 				else
 				{
 					leftBottom.setIcon(leftBlackArrow);
-					createList.setVisible (true);
+					createList.setVisible(true);
 					sortList.setVisible(true);
+					if (i == 5)
+					{
+						insertElement.setVisible(true);
+						deleteElement.setVisible(true);
+					}
+					else if (i == 6)
+					{
+						insertElement.setVisible(true);
+					}
 				}
 			}
 			@Override
@@ -232,15 +258,15 @@ public class GUI
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (codeTraceLabel.isVisible())
+				if (codeTracePanel.isVisible())
 				{
 					rightBottom.setIcon(leftBlackArrow);
-					codeTraceLabel.setVisible (false);
+					codeTracePanel.setVisible (false);
 				}
 				else
 				{
 					rightBottom.setIcon(rightBlackArrow);
-					codeTraceLabel.setVisible (true);
+					codeTracePanel.setVisible (true);
 				}
 			}
 			@Override
@@ -283,20 +309,28 @@ public class GUI
 		statusLabel.setBounds(850,1,370,65);
 		mainBottomPanel.add (statusLabel);
 		
-		codeTraceLabel = new JLabel();
-		codeTraceLabel.setOpaque(true);
-		codeTraceLabel.setBackground(Color.green);
-//		codeTraceLabel.setForeground(Color.white);
-		codeTraceLabel.setVisible(false);
-		codeTraceLabel.setBounds(850,69,370,169);
-		mainBottomPanel.add (codeTraceLabel);
-		
+		codeTracePanel = new JPanel();
+		codeTracePanel.setOpaque(true);
+		codeTracePanel.setBackground(Color.green);
+//		codeTracePanel.setForeground(Color.white);
+		codeTracePanel.setVisible(false);
+		codeTracePanel.setBounds(850,69,370,169);
+		codeTracePanel.setLayout(new GridLayout(7,1));
+		mainBottomPanel.add (codeTracePanel);
+
+		ctl = new JLabel[7];
+		for (int i=0; i<7; i++)
+		{
+			ctl[i] = new JLabel();
+			codeTracePanel.add(ctl[i]);
+		}
+
 		createList = new JButton(" Create");
 		createList.setBackground(Color.cyan);
 		createList.setFocusPainted(false);
 		createList.setBorder(null);
 		createList.setVisible(false);
-		createList.setBounds(0,176,110,32);
+		createList.setBounds(0,208,110,32);
 		createList.setHorizontalAlignment(SwingConstants.LEFT);
 		createList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		mainBottomPanel.add (createList);
@@ -306,6 +340,11 @@ public class GUI
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				goSortList.setVisible(false);
+				insertField.setVisible(false);
+				goInsertElement.setVisible(false);
+				deleteField.setVisible(false);
+				goDeleteElement.setVisible(false);
+				searchField.setVisible(false);
 				userInputField.setVisible(true);
 				goCreateList.setVisible(true);
 			}
@@ -331,17 +370,26 @@ public class GUI
 		sortList.setFocusPainted(false);
 		sortList.setBorder(null);
 		sortList.setVisible(false);
-		sortList.setBounds(0,208,110,32);
+		sortList.setBounds(0,176,110,32);
 		sortList.setHorizontalAlignment(SwingConstants.LEFT);
 		sortList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		mainBottomPanel.add (sortList);
-		
+
 		sortList.addMouseListener(new MouseListener()
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				insertField.setVisible(false);
+				goInsertElement.setVisible(false);
+				deleteField.setVisible(false);
+				goDeleteElement.setVisible(false);
 				userInputField.setVisible(false);
 				goCreateList.setVisible(false);
+				if (instruction == 5)
+				{
+					goSortList.setBounds(262,176,32,32);
+					searchField.setVisible(true);
+				}
 				goSortList.setVisible(true);
 			}
 			@Override
@@ -360,29 +408,284 @@ public class GUI
 			public void mouseReleased(MouseEvent e) {}
 
 		});
-		
+
+		insertElement = new JButton(" Insert");
+		insertElement.setBackground(Color.cyan);
+		insertElement.setFocusPainted(false);
+		insertElement.setBorder(null);
+		insertElement.setVisible(false);
+		insertElement.setBounds(0,144,110,32);
+		insertElement.setHorizontalAlignment(SwingConstants.LEFT);
+		insertElement.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		mainBottomPanel.add (insertElement);
+
+		insertElement.addMouseListener(new MouseListener()
+		{
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				goSortList.setVisible(false);
+				deleteField.setVisible(false);
+				goDeleteElement.setVisible(false);
+				userInputField.setVisible(false);
+				goCreateList.setVisible(false);
+				searchField.setVisible(false);
+				insertField.setVisible(true);
+				goInsertElement.setVisible(true);
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				insertElement.setBackground(Color.black);
+				insertElement.setForeground(Color.white);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				insertElement.setBackground(Color.cyan);
+				insertElement.setForeground(Color.black);
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+
+		});
+
+		deleteElement = new JButton(" Delete");
+		deleteElement.setBackground(Color.cyan);
+		deleteElement.setFocusPainted(false);
+		deleteElement.setBorder(null);
+		deleteElement.setVisible(false);
+		deleteElement.setBounds(0,112,110,32);
+		deleteElement.setHorizontalAlignment(SwingConstants.LEFT);
+		deleteElement.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		mainBottomPanel.add (deleteElement);
+
+		deleteElement.addMouseListener(new MouseListener()
+		{
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				goSortList.setVisible(false);
+				insertField.setVisible(false);
+				goInsertElement.setVisible(false);
+				userInputField.setVisible(false);
+				goCreateList.setVisible(false);
+				searchField.setVisible(false);
+				deleteField.setVisible(true);
+				goDeleteElement.setVisible(true);
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				deleteElement.setBackground(Color.black);
+				deleteElement.setForeground(Color.white);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				deleteElement.setBackground(Color.cyan);
+				deleteElement.setForeground(Color.black);
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+
+		});
+
 		userInputField = new JTextField();
 		userInputField.setVisible(false);
-		userInputField.setBounds(111,176,300,32);
+		userInputField.setBounds(111,208,150,32);
 		userInputField.setBackground(Color.black);
 		userInputField.setForeground(Color.white);
 		userInputField.setCaretColor(Color.white);
 		mainBottomPanel.add(userInputField);
-		
+
+		insertField = new JTextField();
+		insertField.setVisible(false);
+		insertField.setBounds(111,144,150,32);
+		insertField.setBackground(Color.black);
+		insertField.setForeground(Color.white);
+		insertField.setCaretColor(Color.white);
+		mainBottomPanel.add(insertField);
+
+		goInsertElement = new JButton("Go");
+		goInsertElement.setBackground(Color.cyan);
+		goInsertElement.setFocusPainted(false);
+		goInsertElement.setBorder(null);
+		goInsertElement.setVisible(false);
+		goInsertElement.setBounds(262,144,32,32);
+		goInsertElement.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		mainBottomPanel.add (goInsertElement);
+
+		goInsertElement.addMouseListener(new MouseListener()
+		{
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int i = instruction;
+				ArrayList<Integer> a = getInputList(insertField);
+
+				if (i == 5)
+				{
+					globalTimer = bstPanel.insert(a.get(0));
+					String pseudoCode = new StringBuilder()
+									.append("  if found insertion point\n")
+									.append("     create new node\n")
+									.append("  if value to be inserted < this key\n")
+									.append("     go left\n")
+									.append("  else go right\n")
+									.toString();
+					setCodeTraceLabel(pseudoCode);
+					codeTracePanel.setVisible(true);
+				}
+				if (i == 6)
+				{
+					globalTimer = bhPanel.insert(a.get(0));
+					String pseudoCode = new StringBuilder()
+									.append("  A[A.length] = new key\n")
+									.append("  i = A.length - 1\n")
+									.append("  while (i>1 and A[parent(i)] < A[i])\n")
+									.append("     swap A[i] and A[parent(i)]\n")
+									.toString();
+					setCodeTraceLabel(pseudoCode);
+					codeTracePanel.setVisible(true);
+				}
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				goInsertElement.setBackground(Color.black);
+				goInsertElement.setForeground(Color.white);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				goInsertElement.setBackground(Color.cyan);
+				goInsertElement.setForeground(Color.black);
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+
+		});
+
+		deleteField = new JTextField();
+		deleteField.setVisible(false);
+		deleteField.setBounds(111,112,150,32);
+		deleteField.setBackground(Color.black);
+		deleteField.setForeground(Color.white);
+		deleteField.setCaretColor(Color.white);
+		mainBottomPanel.add(deleteField);
+
+		goDeleteElement = new JButton("Go");
+		goDeleteElement.setBackground(Color.cyan);
+		goDeleteElement.setFocusPainted(false);
+		goDeleteElement.setBorder(null);
+		goDeleteElement.setVisible(false);
+		goDeleteElement.setBounds(262,112,32,32);
+		goDeleteElement.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		mainBottomPanel.add (goDeleteElement);
+
+		goDeleteElement.addMouseListener(new MouseListener()
+		{
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int i = instruction;
+				ArrayList<Integer> a = getInputList(deleteField);
+
+				if (i == 5)
+				{
+					globalTimer = bstPanel.delete(a.get(0));
+					String pseudoCode = new StringBuilder()
+									.append("  search for v\n")
+									.append("  if v is a leaf\n")
+									.append("     delete leaf v\n")
+									.append("  else if v has 1 child\n")
+									.append("     bypass v\n")
+									.append("  else replace v with successor\n")
+									.toString();
+					setCodeTraceLabel(pseudoCode);
+					codeTracePanel.setVisible(true);
+				}
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				goDeleteElement.setBackground(Color.black);
+				goDeleteElement.setForeground(Color.white);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				goDeleteElement.setBackground(Color.cyan);
+				goDeleteElement.setForeground(Color.black);
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+
+		});
+
 		goCreateList = new JButton("Go");
 		goCreateList.setBackground(Color.cyan);
 		goCreateList.setFocusPainted(false);
 		goCreateList.setBorder(null);
 		goCreateList.setVisible(false);
-		goCreateList.setBounds(412,176,32,32);
+		goCreateList.setBounds(262,208,32,32);
 		goCreateList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		mainBottomPanel.add (goCreateList);
-		
+
 		goCreateList.addMouseListener(new MouseListener()
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				getInputList();
+				int i = instruction;
+				ArrayList<Integer> a = getInputList(userInputField);
+				
+				if (i >= 0 && i<5)
+				{
+					globalTimer.stop();
+					SortingFunctions p = new SortingFunctions(a);
+					p.setBackground(Color.white);
+					p.setVisible (true);
+					p.setBounds(0,0,1213,420);
+					mainTopPanel.add (p);
+				
+					if (i == 0)
+					{
+						globalTimer = p.bubbleSort();
+					}
+					else if (i == 1)
+					{
+						globalTimer = p.selectionSort();
+					}
+					else if (i == 2)
+					{
+						globalTimer = p.insertionSort();
+					}
+					else if (i == 3)
+					{
+						globalTimer = p.mergeSort();
+					}
+					else
+					{
+						globalTimer = p.quickSort();
+					}
+				}
+				else if (i == 5)
+				{
+					BinarySearchTree b = new BinarySearchTree(a);
+					bstPanel.setVisible(false);
+					bstPanel = new BSTPanel(b);
+					bstPanel.setBackground(Color.white);
+					bstPanel.setVisible(true);
+					bstPanel.setBounds(0,0,1213,420);
+					mainTopPanel.add (bstPanel);
+				}
+				else if (i == 6)
+				{
+					BinaryHeap b = new BinaryHeap(a);
+					bhPanel.setVisible(false);
+					bhPanel = new BHPanel(b);
+					bhPanel.setBackground(Color.white);
+					bhPanel.setVisible(true);
+					bhPanel.setBounds(0,0,1213,420);
+					mainTopPanel.add (bhPanel);
+				}
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -401,19 +704,64 @@ public class GUI
 
 		});
 		
+		searchField = new JTextField();
+		searchField.setVisible(false);
+		searchField.setBounds(111,176,150,32);
+		searchField.setBackground(Color.black);
+		searchField.setForeground(Color.white);
+		searchField.setCaretColor(Color.white);
+		mainBottomPanel.add(searchField);
+
 		goSortList = new JButton("Go");
 		goSortList.setBackground(Color.cyan);
 		goSortList.setFocusPainted(false);
 		goSortList.setBorder(null);
 		goSortList.setVisible(false);
-		goSortList.setBounds(112,208,32,32);
+		goSortList.setBounds(112,176,32,32);
 		goSortList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		mainBottomPanel.add (goSortList);
-		
+
 		goSortList.addMouseListener(new MouseListener()
 		{
 			@Override
-			public void mouseClicked(MouseEvent e) {}
+			public void mouseClicked(MouseEvent e) {
+				int i = instruction;
+				if (i >= 0 && i<5)
+				{
+					globalTimer.start();
+					codeTracePanel.setVisible(true);
+				}
+				else if (i == 5)
+				{
+					ArrayList<Integer> a = getInputList(searchField);
+					globalTimer = bstPanel.search(a.get(0));
+					String pseudoCode = new StringBuilder()
+									.append("  if this == null\n")
+									.append("     return null\n")
+									.append("  else if this key == search value\n")
+									.append("     return this\n")
+									.append("  else if this key < search value\n")
+									.append("     search right\n")
+									.append("  else search left\n")
+									.toString();
+					setCodeTraceLabel(pseudoCode);
+					codeTracePanel.setVisible(true);					
+				}
+				else if (i == 6)
+				{
+					globalTimer = bhPanel.deleteMin();
+					String pseudoCode = new StringBuilder()
+									.append("  swap A[1] and A[A.length]\n")
+									.append("  delete A[A.length] and A.length--\n")
+									.append("  i=1\n")
+									.append("  while (i<A.length)\n")
+									.append("     if A[i] < than the larger of its children\n")
+									.append("        swap A[i] with that child\n")
+									.toString();
+					setCodeTraceLabel(pseudoCode);
+					codeTracePanel.setVisible(true);
+				}
+			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				goSortList.setBackground(Color.black);
@@ -443,48 +791,56 @@ public class GUI
 		bottomPanel.add (developers, gbc);
 		developers.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-		final ArrayList<Integer> list = new ArrayList<Integer>();
-		int[] a = {52,34,22,46,26,97,54,76,19,44,67,84,25,4,30,99,98,40,39,33,43,50,55,10,15,12};
-		for (int i=0; i<a.length; i++)
-			list.add(a[i]);
-		BinarySearchTree b = new BinarySearchTree(list);
-//		BinaryHeap b = new BinaryHeap (list);
+		back = new JButton (new ImageIcon("Images/back.png"));
+		back.setBorder(null);
+		back.setFocusPainted(false);
+		back.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		back.setBackground(Color.black);
+		back.setForeground(Color.white);
+		back.setPreferredSize(new Dimension(65,40));
+		back.setBounds(30,0,65,40);
+		topPanel.add(back);
 
-		SortingFunctions p = new SortingFunctions(list);
-//		BSTPanel p = new BSTPanel(b);
-//		BHPanel p = new BHPanel(b);
-		p.setBackground(Color.white);
-		p.setVisible (true);
-		p.setBounds(0,0,1213,420);
-		mainTopPanel.add (p);
+		back.addMouseListener(new MouseListener()
+		{
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				setVisibility(false);
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseReleased(MouseEvent e) {}
 
-//		p.search(84);
-//		p.insert(2);
-//		p.deleteMin();
-//		p.delete(54);
-//		p.bubbleSort();
-//		p.selectionSort();
-		p.insertionSort();
-//		p.mergeSort();
+		});
+
+		currentAlgo = new JButton ("");
+		currentAlgo.setBorder(null);
+		currentAlgo.setFocusPainted(false);
+		currentAlgo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		currentAlgo.setBackground(Color.black);
+		currentAlgo.setForeground(Color.white);
+		currentAlgo.setPreferredSize(new Dimension(150,40));
+		currentAlgo.setBounds(1100,0,150,40);
+		topPanel.add(currentAlgo);
 
 		mainFrame.pack();
 	    mainFrame.setVisible(true);
-
 	}
 
 	
-	public ArrayList<Integer> getInputList ()
+	public ArrayList<Integer> getInputList (JTextField inputField)
 	{
-		String userInputString = userInputField.getText();
+		String userInputString = inputField.getText();
 		String[] splittedInput = userInputString.split(",");
 		ArrayList<Integer> userInputList = new ArrayList<Integer>();
-		
+
 		for (int i=0; i<splittedInput.length; i++)
 			userInputList.add(Integer.parseInt(splittedInput[i]));
-
-		for (int i=0; i<userInputList.size(); i++)
-			System.out.print (userInputList.get(i)+" ");
-		System.out.println();
 
 		return userInputList;
 	}
@@ -496,7 +852,10 @@ public class GUI
 	
 	public void setCodeTraceLabel (String content)
 	{
-		codeTraceLabel.setText(convertToMultiline(content));
+		String lines[] = content.split("\\r?\\n");
+		for (int i=0; i<lines.length; i++)
+			ctl[i].setText(lines[i]);
+//		codeTracePanel.setText(convertToMultiline(content));
 	}
 
 	private static String convertToMultiline(String original)
@@ -504,4 +863,197 @@ public class GUI
 	    return "<html>" + original.replaceAll("\n", "<br>");
 	}
 	
+	public void setVisibility (boolean v)
+	{
+		mainFrame.setVisible(v);
+	}
+
+	public void bubbleSortWindowInitialize()
+	{
+		instruction = 0;
+		currentAlgo.setText("Bubble Sort");
+		leftBottom.setPreferredSize(new Dimension(40,64));
+		String pseudoCode = new StringBuilder()
+							.append("  do\n")
+							.append("  swapped = false\n")
+							.append("  for i=1 to numOfElements exclusive:\n")
+							.append("     if leftElement > rightElement:\n")
+							.append("        swap(leftElement, rightElement)\n")
+							.append("        swapped = true\n")
+							.append("  while swapped\n")
+							.toString();
+		setCodeTraceLabel(pseudoCode);
+		
+		final ArrayList<Integer> list = new ArrayList<Integer>();
+		int[] a = {52,34,22,46,26,97,54,76,19,44,67,84,25,4,30,99,98,40,39,33,43,50};
+		for (int i=0; i<a.length; i++)
+			list.add(a[i]);
+
+		SortingFunctions p = new SortingFunctions(list);
+		p.setBackground(Color.white);
+		p.setVisible (true);
+		p.setBounds(0,0,1213,420);
+		mainTopPanel.add (p);
+		globalTimer = p.bubbleSort();
+	}
+	
+	public void selectionSortWindowInitialize()
+	{
+		instruction = 1;
+		currentAlgo.setText("Selection Sort");
+		leftBottom.setPreferredSize(new Dimension(40,64));
+		String pseudoCode = new StringBuilder()
+							.append("  repeat (numOfElements-1) times\n")
+							.append("     set the first unsorted element as the minimum\n")
+							.append("     for each of the unsorted elements:\n")
+							.append("        if element < currentMinimum:\n")
+							.append("           set element as minimum\n")
+							.append("     swap minimum with first unswapped position\n")
+							.toString();
+		setCodeTraceLabel(pseudoCode);
+		
+		final ArrayList<Integer> list = new ArrayList<Integer>();
+		int[] a = {52,34,22,46,26,97,54,76,19,44,67,84,25,4,30,99,98,40,39,33,43,50};
+		for (int i=0; i<a.length; i++)
+			list.add(a[i]);
+
+		SortingFunctions p = new SortingFunctions(list);
+		p.setBackground(Color.white);
+		p.setVisible (true);
+		p.setBounds(0,0,1213,420);
+		mainTopPanel.add (p);
+		globalTimer = p.selectionSort();
+	}
+	
+	public void insertionSortWindowInitialize()
+	{
+		instruction = 2;
+		currentAlgo.setText("Insertion Sort");
+		leftBottom.setPreferredSize(new Dimension(40,64));
+		String pseudoCode = new StringBuilder()
+							.append("  mark first element as sorted\n")
+							.append("  for each unsorted element\n")
+							.append("     'extract' the element\n")
+							.append("     for i = lastSortedIndex to 0\n")
+							.append("        if currentSortedElement > extractedElement\n")
+							.append("           move sorted element to the right by 1\n")
+							.append("        else: insert extracted element\n")
+							.toString();
+		setCodeTraceLabel(pseudoCode);
+
+		final ArrayList<Integer> list = new ArrayList<Integer>();
+		int[] a = {52,34,22,46,26,97,54,76,19,44,67,84,25,4,30,99,98,40,39,33,43,50};
+		for (int i=0; i<a.length; i++)
+			list.add(a[i]);
+		
+		SortingFunctions p = new SortingFunctions(list);
+		p.setBackground(Color.white);
+		p.setVisible (true);
+		p.setBounds(0,0,1213,420);
+		mainTopPanel.add (p);
+		globalTimer = p.insertionSort();
+	}
+	
+	public void mergeSortWindowInitialize()
+	{
+		instruction = 3;
+		currentAlgo.setText("Merge Sort");
+		leftBottom.setPreferredSize(new Dimension(40,64));
+		String pseudoCode = new StringBuilder()
+							.append("  split each element into partitions of size 1\n")
+							.append("  recursively merge adjacent partitions\n")
+							.append("     for i = leftPartStartIndex to rightPartLastIndex inclusive\n")
+							.append("        if leftPartHeadValue <= rightPartHeadValue\n")
+							.append("           copy leftPartHeadValue\n")
+							.append("        else: copy rightPartHeadValue\n")
+							.append("  copy elements back to original array\n")
+							.toString();
+		setCodeTraceLabel(pseudoCode);
+		
+		final ArrayList<Integer> list = new ArrayList<Integer>();
+		int[] a = {52,34,22,46,26,97,54,76,19,44,67,84,25,4,30,99,98,40,39,33,43,50};
+		for (int i=0; i<a.length; i++)
+			list.add(a[i]);
+		
+		SortingFunctions p = new SortingFunctions(list);
+		p.setBackground(Color.white);
+		p.setVisible (true);
+		p.setBounds(0,0,1213,420);
+		mainTopPanel.add (p);
+		globalTimer = p.mergeSort();
+	}
+	
+	public void quickSortWindowInitialize()
+	{
+		instruction = 4;
+		currentAlgo.setText("Quick Sort");
+		leftBottom.setPreferredSize(new Dimension(40,64));
+		String pseudoCode = new StringBuilder()
+							.append("  for each (unsorted) partition\n")
+							.append("     set first element as pivot\n")
+							.append("     storeIndex = pivotIndex + 1\n")
+							.append("     for i = pivotIndex + 1 to rightmostIndex\n")
+							.append("        if element[i] < element[pivot]\n")
+							.append("           swap(i, storeIndex); storeIndex++\n")
+							.append("     swap(pivot, storeIndex - 1)\n")
+							.toString();
+		setCodeTraceLabel(pseudoCode);
+		
+		final ArrayList<Integer> list = new ArrayList<Integer>();
+		int[] a = {52,34,22,46,26,97,54,76,19,44,67,84,25,4,30,99,98,40,39,33,43,50};
+		for (int i=0; i<a.length; i++)
+			list.add(a[i]);
+		
+		SortingFunctions p = new SortingFunctions(list);
+		p.setBackground(Color.white);
+		p.setVisible (true);
+		p.setBounds(0,0,1213,420);
+		mainTopPanel.add (p);
+		globalTimer = p.quickSort();
+	}
+
+	public void binarySearchTreeWindowInitialize()
+	{
+		instruction = 5;
+		currentAlgo.setText("Binary Search Tree");
+		leftBottom.setPreferredSize(new Dimension(40,128));
+		sortList.setText(" Search");
+
+		final ArrayList<Integer> list = new ArrayList<Integer>();
+		int[] a = {52,34,22,46,26,97,54,76,19,44,67,84,25,4,30,99,98,40,39,33,43,50};
+		for (int i=0; i<a.length; i++)
+			list.add(a[i]);
+
+		BinarySearchTree b = new BinarySearchTree(list);
+		bstPanel = new BSTPanel(b);
+		bstPanel.setBackground(Color.white);
+		bstPanel.setVisible (true);
+		bstPanel.setBounds(0,0,1213,420);
+		mainTopPanel.add (bstPanel);
+	}
+	
+	public void binaryHeapWindowInitialize()
+	{
+		instruction = 6;
+		currentAlgo.setText("Binary Heap");
+		leftBottom.setPreferredSize(new Dimension(40,96));
+
+		deleteElement.setVisible(false);
+		deleteField.setVisible(false);
+		goDeleteElement.setVisible(false);
+		sortList.setText(" Delete Min");
+
+		final ArrayList<Integer> list = new ArrayList<Integer>();
+		int[] a = {52,34,22,46,26,97,54,76,19,44,67,84,25,4,30,99,98,40,39,33,43,50};
+		for (int i=0; i<a.length; i++)
+			list.add(a[i]);
+
+		BinaryHeap b = new BinaryHeap(list);
+		bhPanel = new BHPanel(b);
+		bhPanel.setBackground(Color.white);
+		bhPanel.setVisible (true);
+		bhPanel.setBounds(0,0,1213,420);
+		mainTopPanel.add (bhPanel);
+	}
+
 }
