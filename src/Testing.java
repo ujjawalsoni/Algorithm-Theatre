@@ -21,17 +21,10 @@ public class Testing
 		list.add(89);
 		list.add(95);
 		list.add(22);
+		list.add(95);
+		list.add(22);
 		list.add(67);
 		list.add(8);
-		list.add(44);
-		list.add(7);
-		list.add(67);
-		list.add(99);
-		list.add(79);
-		list.add(6);
-		list.add(67);
-		list.add(8);
-		
 		SwingUtilities.invokeLater(new Runnable()
 		{
 			public void run()
@@ -46,11 +39,11 @@ public class Testing
 		System.out.println("Created GUI on EDT? " + SwingUtilities.isEventDispatchThread());
 		JFrame f = new JFrame("Swing Paint Demo");
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setMinimumSize(new Dimension(500, 500));
+		f.setMinimumSize(new Dimension(800, 800));
 		SortingFunctions sort = new SortingFunctions(list);
 		f.add(sort);
 		//javax.swing.Timer t = new Timer(100, null);
-		sort.selectionSort();
+		sort.quickSort();
 		f.setSize(800, 800);
 		f.setVisible(true);
 	}
@@ -64,9 +57,10 @@ class MyPanel extends JPanel implements ActionListener
 	{
 		setBorder(BorderFactory.createLineBorder(Color.black));
 		box = new ArrayRectangle();
-		box.setBaseX(200);
-		box.setBaseY(200);
 		box.initializeRectangle(list);
+		System.out.println(super.getWidth());
+		box.setBaseX(300);
+		box.setBaseY(500);
 		this.paintBox();
 		
 	}

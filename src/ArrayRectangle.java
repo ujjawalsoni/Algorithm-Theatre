@@ -263,6 +263,15 @@ class ArrayRectangle
 		}
 	}
 	
+	public void printArrayRectangle()
+	{
+		System.out.println();
+		for (int i = 0; i < number; i++)
+		{
+			System.out.println(i + " " + this.getRectangle(i).getData());
+		}
+	}
+	
 	/*
 	 * sets coordinates of each rectangle appropriately so that they align to the same line and to
 	 * same base
