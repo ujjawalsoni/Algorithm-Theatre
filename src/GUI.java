@@ -1,3 +1,10 @@
+/**
+ *	Project:	Algorithm Theatre
+ *
+ * 	Authors:	Ishu Dharmendra Garg (CS13B060)
+ *				Ujjawal Soni (CS13B053)
+ */
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -24,7 +31,7 @@ import javax.swing.WindowConstants;
 
 public class GUI
 {
-	/*
+	/**
 	 * mainFrame - the main frame of the gui
 	 * the mainPane (container) is divided into 5 jpanels
 	 * ** centre
@@ -84,9 +91,7 @@ public class GUI
 	private JButton currentAlgo;
 
 	private ImageIcon rightBlackArrow;
-	private ImageIcon rightWhiteArrow;
 	private ImageIcon leftBlackArrow;
-	private ImageIcon leftWhiteArrow;
 	
 	protected BSTPanel bstPanel;
 	protected BHPanel bhPanel;
@@ -103,17 +108,15 @@ public class GUI
 	public void initialize ()
 	{
 		rightBlackArrow = new ImageIcon ("Images/arrow_black_right.png");
-		rightWhiteArrow = new ImageIcon ("Images/arrow_white_right.png");
 		leftBlackArrow = new ImageIcon ("Images/arrow_black_left.png");
-		leftWhiteArrow = new ImageIcon ("Images/arrow_white_left.png");
-
+		
 		mainFrame = new JFrame ("Algorithm Theatre");
 		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();		
 		mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		mainFrame.setSize(screenSize);
-//	    mainFrame.setResizable (false);
+//	    mainFrame.setResizable(false);
 
 	    mainPane = mainFrame.getContentPane();
 	    centrePanel = new JPanel ();
@@ -312,7 +315,6 @@ public class GUI
 		codeTracePanel = new JPanel();
 		codeTracePanel.setOpaque(true);
 		codeTracePanel.setBackground(Color.green);
-//		codeTracePanel.setForeground(Color.white);
 		codeTracePanel.setVisible(false);
 		codeTracePanel.setBounds(850,69,370,169);
 		codeTracePanel.setLayout(new GridLayout(7,1));
@@ -778,9 +780,9 @@ public class GUI
 			public void mouseReleased(MouseEvent e) {}
 
 		});
-		
-		developers = new JButton("Developers");
-		developers.setPreferredSize(new Dimension(100,30));
+
+		developers = new JButton("Developers - Ishu Dharmendra Garg & Ujjawal Soni");
+		developers.setPreferredSize(new Dimension(400,30));
 		developers.setFocusPainted(false);
 		developers.setBorder(null);
 		developers.setBackground(Color.black);

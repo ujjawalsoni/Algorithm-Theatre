@@ -1,21 +1,26 @@
-import java.awt.Color;
+/**
+ *	Project:	Algorithm Theatre
+ *
+ * 	Authors:	Ishu Dharmendra Garg (CS13B060)
+ *				Ujjawal Soni (CS13B053)
+ *
+ */
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 
 class MyPanel extends JPanel implements ActionListener
 {
 	protected ArrayRectangle box;
-	
+
 	public MyPanel(ArrayList<Integer> list)
 	{
-		setBorder(BorderFactory.createLineBorder(Color.black));
 		box = new ArrayRectangle();
 		box.setBaseX(200);
 		box.setBaseY(200);

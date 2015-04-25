@@ -1,9 +1,18 @@
+/**
+ *	Project:	Algorithm Theatre
+ *
+ * 	Authors:	Ishu Dharmendra Garg (CS13B060)
+ *				Ujjawal Soni (CS13B053)
+ *
+ */
+
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 
+
 /**
- * @author Ishu Dharmendra Garg (CS13B060)
  * A basic rectangle unit that is used to show a number graphically (height = data) 
  */
 class Rectangle

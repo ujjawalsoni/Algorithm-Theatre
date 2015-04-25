@@ -1,6 +1,12 @@
+/**
+ *	Project:	Algorithm Theatre
+ *
+ * 	Authors:	Ishu Dharmendra Garg (CS13B060)
+ *				Ujjawal Soni (CS13B053)
+ */
+
 import java.awt.Graphics;
 import java.util.ArrayList;
-
 
 public class BinaryHeap 
 {

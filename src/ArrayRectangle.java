@@ -1,9 +1,16 @@
+/**
+ *	Project:	Algorithm Theatre
+ *
+ * 	Authors:	Ishu Dharmendra Garg (CS13B060)
+ *				Ujjawal Soni (CS13B053)
+ */
+
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
 /**
- * @author Ishu Dharmendra Garg (CS13B060)
  * A Collection of rectangles that will be used for showing an array of positive numbers 
  */
 class ArrayRectangle

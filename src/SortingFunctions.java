@@ -1,3 +1,10 @@
+/**
+ *	Project:	Algorithm Theatre
+ *
+ * 	Authors:	Ishu Dharmendra Garg (CS13B060)
+ *				Ujjawal Soni (CS13B053)
+ */
+
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,9 +16,10 @@ import javax.swing.Timer;
 
 public class SortingFunctions extends MyPanel
 {
-	
+	private static final long serialVersionUID = 1L;
+
 	private static final int TIMER_SPEED = 25;
-	private static final int XCHANGE = 4;
+	private static final int XCHANGE = 8;
 	private static final int YCHANGE = 4;
 	private static final int DOWN = 100;
 	private static final int DELAY = 20;
@@ -265,6 +273,8 @@ public class SortingFunctions extends MyPanel
 		final Timer timer = new Timer(TIMER_SPEED, this);
 		final int width = super.getRectangleSpace();
 		final int size = super.box.getArrayRectangle().length;
+		box.resetArrayRectangle();
+		paintBox();
 		
 		ActionListener action = new ActionListener()
 		{
@@ -474,17 +484,18 @@ public class SortingFunctions extends MyPanel
 		final Timer timer = new Timer(TIMER_SPEED, this);
 		final int width = super.getRectangleSpace();
 		final int size = super.box.getArrayRectangle().length;
+		box.resetArrayRectangle();
+		paintBox();
+
 		box.setColorRange(0, size - 1, BLOCK_COLOR1);
 		box.getRectangle(0).setColor(FOCUS_COLOR2);
 		paintBox();
+
 		ActionListener action = new ActionListener()
 		{
 			
 			// i represents the index of the current rectangle
 			int i = 0;
-			
-			//stores the index of the first rectangle whose data is less of equal to the current rectangle 
-			int k = 0;
 			
 			// 
 			int index = 0;
@@ -703,11 +714,9 @@ public class SortingFunctions extends MyPanel
 						Rectangle smallestRect = box.getRectangle(smallest);
 						
 						// reflecting the changes internally
-						Rectangle scanRect;
 						int t;
 						for (t = smallest; t > i; t--)
 						{
-							scanRect = box.getRectangle(t - 1);
 							box.setRectangle(box.getRectangle(t - 1), t);
 						}
 						
@@ -745,6 +754,8 @@ public class SortingFunctions extends MyPanel
 		final Timer timer = new Timer(TIMER_SPEED, this);
 		final int size = super.box.getArrayRectangle().length;
 		final int width = super.getRectangleSpace();
+		box.resetArrayRectangle();
+		paintBox();
 		
 		ActionListener action = new ActionListener()
 		{
@@ -1106,9 +1117,9 @@ public class SortingFunctions extends MyPanel
 		box.setBaseColor(BASE_COLOR);
 		box.resetArrayRectangle();
 		paintBox();
+
 		final Timer timer = new Timer(TIMER_SPEED, this);
 		final int width = super.getRectangleSpace();
-		final int size = super.box.getArrayRectangle().length;
 		
 		ActionListener action = new ActionListener()
 		{

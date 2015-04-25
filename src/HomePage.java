@@ -1,8 +1,16 @@
+/**
+ *	Project:	Algorithm Theatre
+ *
+ * 	Authors:	Ishu Dharmendra Garg (CS13B060)
+ *				Ujjawal Soni (CS13B053)
+ */
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
@@ -81,7 +89,8 @@ public class HomePage
 		bubbleSort.setBorder(null);
 		bubbleSort.setFocusPainted(false);
 		bubbleSort.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		bubbleSort.setBackground(Color.lightGray);
+		bubbleSort.setBackground(Color.yellow);
+		bubbleSort.setFont(new Font("Arial", Font.PLAIN, 30));
 		centrePanel.add(bubbleSort);
 
 		bubbleSort.addMouseListener(new MouseListener()
@@ -107,7 +116,8 @@ public class HomePage
 		selectionSort.setBorder(null);
 		selectionSort.setFocusPainted(false);
 		selectionSort.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		selectionSort.setBackground(Color.lightGray);
+		selectionSort.setBackground(Color.yellow);
+		selectionSort.setFont(new Font("Arial", Font.PLAIN, 30));
 		centrePanel.add(selectionSort);
 
 		selectionSort.addMouseListener(new MouseListener()
@@ -133,7 +143,8 @@ public class HomePage
 		insertionSort.setBorder(null);
 		insertionSort.setFocusPainted(false);
 		insertionSort.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		insertionSort.setBackground(Color.lightGray);
+		insertionSort.setBackground(Color.yellow);
+		insertionSort.setFont(new Font("Arial", Font.PLAIN, 30));
 		centrePanel.add(insertionSort);
 		
 		insertionSort.addMouseListener(new MouseListener()
@@ -159,7 +170,8 @@ public class HomePage
 		mergeSort.setBorder(null);
 		mergeSort.setFocusPainted(false);
 		mergeSort.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		mergeSort.setBackground(Color.lightGray);
+		mergeSort.setBackground(Color.yellow);
+		mergeSort.setFont(new Font("Arial", Font.PLAIN, 30));
 		centrePanel.add(mergeSort);
 
 		mergeSort.addMouseListener(new MouseListener()
@@ -185,7 +197,8 @@ public class HomePage
 		quickSort.setBorder(null);
 		quickSort.setFocusPainted(false);
 		quickSort.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		quickSort.setBackground(Color.lightGray);
+		quickSort.setBackground(Color.yellow);
+		quickSort.setFont(new Font("Arial", Font.PLAIN, 30));
 		centrePanel.add(quickSort);
 
 		quickSort.addMouseListener(new MouseListener()
@@ -207,11 +220,12 @@ public class HomePage
 		});
 
 
-		binarySearchTree = new JButton("Binary Search Tree");
+		binarySearchTree = new JButton("<html>Binary Search<br><center>Tree</center></html>");
 		binarySearchTree.setBorder(null);
 		binarySearchTree.setFocusPainted(false);
 		binarySearchTree.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		binarySearchTree.setBackground(Color.lightGray);
+		binarySearchTree.setBackground(Color.yellow);
+		binarySearchTree.setFont(new Font("Arial", Font.PLAIN, 30));
 		centrePanel.add(binarySearchTree);
 		
 		binarySearchTree.addMouseListener(new MouseListener()
@@ -237,7 +251,8 @@ public class HomePage
 		binaryHeap.setBorder(null);
 		binaryHeap.setFocusPainted(false);
 		binaryHeap.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		binaryHeap.setBackground(Color.lightGray);
+		binaryHeap.setBackground(Color.yellow);
+		binaryHeap.setFont(new Font("Arial", Font.PLAIN, 30));
 		centrePanel.add(binaryHeap);
 
 		binaryHeap.addMouseListener(new MouseListener()
