@@ -9,7 +9,7 @@ import javax.swing.Timer;
 
 public class SortingFunctions extends MyPanel
 {
-
+	
 	private static final int TIMER_SPEED = 25;
 	private static final int XCHANGE = 4;
 	private static final int YCHANGE = 4;
@@ -22,20 +22,17 @@ public class SortingFunctions extends MyPanel
 	private static final Color FOCUS_COLOR2 = Color.GREEN;
 	private static final Color BLOCK_COLOR1 = Color.PINK;
 	private static final Color BLOCK_COLOR2 = Color.GRAY;
-	Random random = new Random();
+	Random random;
 	
 	public SortingFunctions(ArrayList<Integer> list)
 	{
 		super(list);
-		System.out.println(this.getHeight());
-		System.out.println(this.getWidth());
+		random = new Random();
 	}
 	
 	public Timer bubbleSort()
 	{
 		box.setBaseColor(BASE_COLOR);
-		box.setBaseX(300);
-		box.setBaseY(300);
 		box.resetArrayRectangle();
 		paintBox();
 		final Timer timer = new Timer(TIMER_SPEED, this);
@@ -260,7 +257,6 @@ public class SortingFunctions extends MyPanel
 			}
 		};
 		timer.addActionListener(action);
-		
 		return timer;
 	}
 	
@@ -362,7 +358,6 @@ public class SortingFunctions extends MyPanel
 					currentDownCount += YCHANGE;
 					if (currentDownCount >= DOWN)
 					{
-						System.out.println("DOWN i " + i + " k " + k);
 						int excess = currentDownCount - DOWN;
 						box.addOffsetRectangle(i, 0, -excess);
 						paintBox();
@@ -377,7 +372,6 @@ public class SortingFunctions extends MyPanel
 				{
 					if (index <= k)
 					{
-						System.out.println("rightEnd i " + i + " k " + k);
 						rightBlockFlag = 0;
 						leftFlag = 1;
 						currentLeftCount = 0;
@@ -416,7 +410,6 @@ public class SortingFunctions extends MyPanel
 					paintBox();
 					if (currentLeftCount >= width * (i - 1 - k))
 					{
-						System.out.println("Left End i " + i + " k " + k);
 						int excess = currentLeftCount - width * (i - 1 - k);
 						box.addOffsetRectangle(i, excess, 0);
 						paintBox();
@@ -434,7 +427,6 @@ public class SortingFunctions extends MyPanel
 					paintBox();
 					if (currentUpCount >= DOWN)
 					{
-						System.out.println("UP End i " + i + " k " + k);
 						int excess = currentUpCount - DOWN;
 						box.addOffsetRectangle(i, 0, excess);
 						paintBox();
@@ -474,7 +466,6 @@ public class SortingFunctions extends MyPanel
 			}
 		};
 		timer.addActionListener(action);
-		
 		return timer;
 	}
 	
@@ -483,7 +474,9 @@ public class SortingFunctions extends MyPanel
 		final Timer timer = new Timer(TIMER_SPEED, this);
 		final int width = super.getRectangleSpace();
 		final int size = super.box.getArrayRectangle().length;
-		
+		box.setColorRange(0, size - 1, BLOCK_COLOR1);
+		box.getRectangle(0).setColor(FOCUS_COLOR2);
+		paintBox();
 		ActionListener action = new ActionListener()
 		{
 			
@@ -529,11 +522,26 @@ public class SortingFunctions extends MyPanel
 			// moving a whole block of rectangle to the right
 			int rightBlockFlag = 0;
 			
+			int codeSearchFlag = 0;
+			
+			int codeInitializeFlag = 1;
+			
+			int l = 0;
+			
+			// current smallest rectangle in the unsorted array
+			Rectangle smallestRect;
+			
+			// delay flags for introducing delays
+			int delay1 = 0;
+			int delayFlag1 = 0;
+			int delay2 = 0;
+			int delayFlag2 = 0;
+			
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				// step zero check whether to continue the algorithm or not
-				if (i >= size)
+				if (i >= size - 1)
 				{
 					timer.stop();
 					box.setBaseColor(END_COLOR);
@@ -542,24 +550,65 @@ public class SortingFunctions extends MyPanel
 				// Step one find a suitable index where to place the current rectangle
 				else if (codeFlag == 1)
 				{
-					Rectangle currRect = box.getRectangle(i);
-					Rectangle scanRect;
-					smallest = i;
-					index = i;
-					for (k = i + 1; k < size; k++)
+					// initializing conditions for a block
+					if (codeInitializeFlag == 1)
 					{
-						scanRect = box.getRectangle(k);
-						if (currRect.getData() > scanRect.getData())
+						l = i + 1;
+						smallest = i;
+						index = i;
+						smallestRect = box.getRectangle(i);
+						codeInitializeFlag = 0;
+						codeSearchFlag = 1;
+					}
+					
+					// searching the smallest rectangle in the unsorted list
+					else if (codeSearchFlag == 1)
+					{
+						if (l >= size)
 						{
-							currRect = scanRect;
-							smallest = k;
-							index = k - 1;
+							codeFlag = 0;
+							codeSearchFlag = 0;
+							codeInitializeFlag = 1;
+							
+							downFlag = 1;
+							currentDownCount = 0;
+							
+						}
+						else
+						{
+							Rectangle currentRect = box.getRectangle(l);
+							
+							if (currentRect.getData() < smallestRect.getData())
+							{
+								smallestRect.setColor(BLOCK_COLOR2);
+								
+								smallestRect = currentRect;
+								smallestRect.setColor(FOCUS_COLOR2);
+								smallest = l;
+								index = l - 1;
+								paintBox();
+							}
+							else
+							{
+								currentRect.setColor(BLOCK_COLOR2);
+								paintBox();
+							}
+							codeSearchFlag = 0;
+							delayFlag1 = 1;
+							delay1 = 0;
 						}
 					}
-					currRect.setColor(FOCUS_COLOR2);
-					codeFlag = 0;
-					downFlag = 1;
-					currentDownCount = 0;
+					// delay after the smallest element has been searched
+					else if (delayFlag1 == 1)
+					{
+						delay1++;
+						if (delay1 >= DELAY)
+						{
+							l++;
+							delayFlag1 = 0;
+							codeSearchFlag = 1;
+						}
+					}
 				}
 				
 				// moving the smallest rectangle down
@@ -588,7 +637,7 @@ public class SortingFunctions extends MyPanel
 					}
 				}
 				
-				//moving the block of rectangle to the right whic are less than the smallest
+				//moving the block of rectangle to the right which are less than the smallest
 				else if (rightBlockFlag == 1)
 				{
 					if (index == smallest || index < i)
@@ -664,6 +713,23 @@ public class SortingFunctions extends MyPanel
 						
 						box.setRectangle(smallestRect, i);
 						upFlag = 0;
+						delayFlag2 = 1;
+						delay2 = 0;
+						if (i + 1 < size)
+						{
+							box.setColorRange(i + 1, size - 1, BLOCK_COLOR1);
+							box.getRectangle(i + 1).setColor(FOCUS_COLOR2);
+						}
+						box.getRectangle(i).setColor(FOCUS_COLOR1);
+						paintBox();
+					}
+				}
+				else if (delayFlag2 == 1)
+				{
+					delay2++;
+					if (delay2 >= DELAY)
+					{
+						delayFlag2 = 0;
 						codeFlag = 1;
 						i++;
 					}
@@ -671,7 +737,6 @@ public class SortingFunctions extends MyPanel
 			}
 		};
 		timer.addActionListener(action);
-		
 		return timer;
 	}
 	
@@ -683,44 +748,54 @@ public class SortingFunctions extends MyPanel
 		
 		ActionListener action = new ActionListener()
 		{
+			// the current size of the block to be sorted 
 			int currentSize = 1;
+			
+			// left start , mid and right end of the block to be sorted
 			int leftStart = 0;
 			int rightEnd = 0;
 			int mid = 0;
+			
+			// delay flags
 			int mergeSortDelayFlag1 = 0;
 			int mergeSortdelay1 = 0;
-			int mergeSortCodeFlag = 1;
-			// current index of the first array
+			
+			// current index of the first array to be merged
 			int i;
-			// current index of first element of second array 
+			// current index of first element of second array to be merged 
 			int j;
 			
 			// index is used to shift all the element that are between i and j (including i) 
 			int index = 0;
 			
-			// rest of it has the usual meaning
-			
 			// merge flags
-			int currentDownCount = 0;
-			int indexRightCount = 0;
-			int currentLeftCount = 0;
-			int currentUpCount = 0;
+			int mergeSortCodeFlag = 1;
 			int codeFlag = 1;
 			int rightFlag = 0;
 			int rightBlockFlag = 0;
 			int downFlag = 0;
 			int upFlag = 0;
 			int leftFlag = 0;
+			
+			int currentDownCount = 0;
+			int indexRightCount = 0;
+			int currentLeftCount = 0;
+			int currentUpCount = 0;
+			
 			int delay1 = 0;
 			int delayFlag1 = 0;
 			int delay2 = 0;
 			int delayFlag2 = 0;
+			int colorDelayFlag2 = 0;
+			
 			int colorFlag1 = 1;
 			int colorDelayFlag1 = 0;
+			
 			int colorDelay1 = 0;
 			int colorFlag2 = 1;
-			int colorDelayFlag2 = 0;
 			int colorDelay2 = 0;
+			
+			// left mid and right
 			int l = 0;
 			int m = 0;
 			int r = 0;
@@ -738,7 +813,8 @@ public class SortingFunctions extends MyPanel
 					System.out.println("MERGESORT END");
 					timer.stop();
 				}
-				// Step one find a suitable index where to place the current rectangle
+				
+				// deciding the block to to merged
 				else if (mergeSortCodeFlag == 1)
 				{
 					if (leftStart >= size - 1)
@@ -746,6 +822,7 @@ public class SortingFunctions extends MyPanel
 						currentSize = currentSize * 2;
 						leftStart = 0;
 					}
+					
 					else
 					{
 						mid = leftStart + currentSize - 1;
@@ -774,16 +851,15 @@ public class SortingFunctions extends MyPanel
 						leftStart += 2 * currentSize;
 					}
 				}
+				
+				// Merging the block selected
+				
+				// initializing the variables needed by the merge block 
 				else if (mergeInitializeFlag == 1)
 				{
 					i = l;
-					// current index of first element of second array 
 					j = m + 1;
-					
-					// index is used to shift all the element that are between i and j (including i) 
 					index = 0;
-					
-					// rest of it has the usual meaning
 					currentDownCount = 0;
 					indexRightCount = 0;
 					currentLeftCount = 0;
@@ -812,9 +888,11 @@ public class SortingFunctions extends MyPanel
 					mergeFlag = 1;
 					mergeInitializeFlag = 0;
 				}
+				
+				// actual merging starts here
 				else if (mergeFlag == 1)
 				{
-					// step zero check whether to continue the algorithm or not
+					// step zero check whether to continue merging or not
 					if (j > r)
 					{
 						if (i >= j)
@@ -870,6 +948,7 @@ public class SortingFunctions extends MyPanel
 							}
 						}
 					}
+					
 					// Step one Check whether a[i] <= a[j]
 					else if (codeFlag == 1)
 					{
@@ -972,6 +1051,7 @@ public class SortingFunctions extends MyPanel
 						}
 					}
 					
+					// moving the rectangle left (the smallest in the un-merged block)
 					else if (leftFlag == 1)
 					{
 						box.addOffsetRectangle(j, -XCHANGE, 0);
@@ -989,6 +1069,7 @@ public class SortingFunctions extends MyPanel
 						}
 					}
 					
+					// moving the rectangle up (the smallest in the un-merged block)
 					else if (upFlag == 1)
 					{
 						box.addOffsetRectangle(j, 0, -YCHANGE);
@@ -1017,7 +1098,6 @@ public class SortingFunctions extends MyPanel
 			}
 		};
 		timer.addActionListener(action);
-		
 		return timer;
 	}
 	
@@ -1032,6 +1112,29 @@ public class SortingFunctions extends MyPanel
 		
 		ActionListener action = new ActionListener()
 		{
+			// stores the left index of the block still to be sorted
+			Stack<Integer> leftP = new Stack<Integer>();
+			
+			// stores the right index of the block still to be sorted
+			Stack<Integer> rightP = new Stack<Integer>();
+			
+			// the pivot selected in the current block
+			int pivot = 0;
+			
+			// left and right end of the block selected for sorting
+			int left = 0;
+			int right = 0;
+			
+			int rightBlockFlag = 0;
+			int index = 0;
+			int partetionFlag = 0;
+			int small = 0, big = 0;
+			Rectangle rect = null;
+			int partetionCodeFlag = 1;
+			int partetionSwapFalg = 0;
+			int partetionEnd = 0;
+			int initializeStackFlag = 1;
+			
 			// Stores how much a the current rectangle has moved down
 			int currentDownCount = 0;
 			
@@ -1085,35 +1188,23 @@ public class SortingFunctions extends MyPanel
 			int delayFlag3 = 0;
 			
 			int seperateFlag = 0;
-			Stack<Integer> leftP = new Stack<Integer>();
-			Stack<Integer> rightP = new Stack<Integer>();
-			int pivot = 0;
-			int left = 0;
-			int right = 0;
-			int rightBlockFlag = 0;
-			int index = 0;
-			int partetionFlag = 0;
-			int small = 0, big = 0;
-			Rectangle rect = null;
-			int partetionCodeFlag = 1;
-			int partetionSwapFalg = 0;
-			int partetionEnd = 0;
-			int initializeStackFlag = 1;
 			
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
+				// putting first index(0) and last index (size -1) in the stacks 
 				if (initializeStackFlag == 1)
 				{
-					System.out.println("initiaize Stack");
 					leftP.add(0);
 					rightP.add(box.getArrayRectangle().length - 1);
 					initializeStackFlag = 0;
 					codeFlag = 1;
 				}
 				
+				// Decides which block has to be sorted 
 				else if (codeFlag == 1)
 				{
+					// if the stack becomes empty then i means that our algorithm is over
 					if (rightP.isEmpty() || leftP.isEmpty())
 					{
 						codeFlag = 0;
@@ -1136,10 +1227,12 @@ public class SortingFunctions extends MyPanel
 					
 					else
 					{
-						System.out.println("CodeFlag");
+						// takes out the left and right index from the stack
 						left = leftP.pop();
 						right = rightP.pop();
-						pivot = (left + right) / 2; // TODO later change it to random number
+						
+						// selecting a pivot in the block
+						pivot = random.nextInt(right - left + 1) + left;
 						
 						//box.setColorRange(0, box.getNumber() - 1, BLOCK_COLOR2);
 						box.setColorRange(left, right, BLOCK_COLOR1);
@@ -1158,9 +1251,6 @@ public class SortingFunctions extends MyPanel
 					delay3++;
 					if (delay3 >= DELAY)
 					{
-						System.out.println("delay 3");
-						System.out.println("left " + left + " right " + right);
-						
 						delayFlag3 = 0;
 						delay3 = 0;
 						
@@ -1168,6 +1258,7 @@ public class SortingFunctions extends MyPanel
 						seperateFlag = 1;
 						currentDownCount = 0;
 						
+						// if block has only one element then just sort the next block
 						if (left == right)
 						{
 							downFlag = 0;
@@ -1177,13 +1268,36 @@ public class SortingFunctions extends MyPanel
 							codeFlag = 1;
 							box.getRectangle(left).setColor(BASE_COLOR);
 						}
+						
+						// if pivot selected is left then just start separating the elements(lesser and bigger ones)
+						if (pivot == left)
+						{
+							downFlag = 0;
+							seperateFlag = 0;
+							currentDownCount = 0;
+							
+							upFlag = 0;
+							seperateFlag = 0;
+							
+							partetionFlag = 1;
+							partetionCodeFlag = 1;
+							delayFlag5 = 0;
+							delay5 = 0;
+							
+							rect = box.getRectangle(left);
+							big = left + 1;
+							small = left;
+							
+						}
+						
 					}
 				}
 				
+				// first bring the pivot at the beginning of the block
+				
+				// moving the pivot down
 				else if (seperateFlag == 1)
 				{
-					// assuming that the pivot is to be moved to
-					//shifting the next block down
 					if (downFlag == 1)
 					{
 						box.addOffsetRectangle(pivot, 0, YCHANGE);
@@ -1200,12 +1314,11 @@ public class SortingFunctions extends MyPanel
 						}
 					}
 					
-					// moving the block of rectangle to the left
+					// moving the block of rectangle (to the left of the pivot) to the right
 					else if (rightBlockFlag == 1)
 					{
 						if (index < left)
 						{
-							//System.out.println("rightEnd i " + i + " k " + k);
 							rightBlockFlag = 0;
 							leftFlag = 1;
 							currentLeftCount = 0;
@@ -1235,7 +1348,8 @@ public class SortingFunctions extends MyPanel
 							index--;
 						}
 					}
-					// shifting the next block to left
+					
+					// shifting the pivot to left
 					else if (leftFlag == 1)
 					{
 						box.addOffsetRectangle(pivot, -XCHANGE, 0);
@@ -1253,6 +1367,7 @@ public class SortingFunctions extends MyPanel
 						}
 					}
 					
+					// moving the piot up
 					else if (upFlag == 1)
 					{
 						box.addOffsetRectangle(pivot, 0, -YCHANGE);
@@ -1274,22 +1389,19 @@ public class SortingFunctions extends MyPanel
 							delay5 = 0;
 							Rectangle pivotRectangle = box.getRectangle(pivot);
 							
-							box.printArrayRectangle();
-							
 							for (int t = pivot - 1; t >= left; t--)
 								box.setRectangle(box.getRectangle(t), t + 1);
 							
 							box.setRectangle(pivotRectangle, left);
-							
-							box.printArrayRectangle();
-							
 							rect = box.getRectangle(left);
-							
 							big = left + 1;
 							small = left;
 						}
 					}
 				}
+				
+				// after the pivot has been moved to the starting index then start separating the rectangle
+				// those which are smaller and those which are bigger than than pivot are separated
 				
 				else if (partetionFlag == 1)
 				{
@@ -1312,7 +1424,6 @@ public class SortingFunctions extends MyPanel
 					}
 					else if (big > right)
 					{
-						System.out.println(" Partetion Flag :  big > right");
 						partetionFlag = 0;
 						
 						partetionEnd = 1;
@@ -1331,7 +1442,6 @@ public class SortingFunctions extends MyPanel
 						
 						if (left == small)
 						{
-							// TODO add color changing of the this block to something
 							box.setColorRange(left + 1, right, BLOCK_COLOR1);
 							box.getRectangle(small).setColor(BASE_COLOR);
 							paintBox();
@@ -1371,7 +1481,6 @@ public class SortingFunctions extends MyPanel
 						}
 						else if (rect.getData() <= box.getRectangle(big).getData())
 						{
-							System.out.println(" Partetion CODE  1 Flag : data big >= data pivot big++");
 							delayFlag1 = 1;
 							delay1 = 0;
 							box.getRectangle(big).setColor(BLOCK_COLOR2);
@@ -1380,11 +1489,9 @@ public class SortingFunctions extends MyPanel
 						
 						else
 						{
-							System.out.println(" Partetion CODE 2 Flag : data big < data pivot");
 							
 							if (big == small + 1)
 							{
-								System.out.println(" big == small + 1 : big ++ , small ++ ");
 								delayFlag2 = 1;
 								delay2 = 0;
 								box.getRectangle(big).setColor(DFAULT_COLOR);
@@ -1392,7 +1499,6 @@ public class SortingFunctions extends MyPanel
 							}
 							else
 							{
-								System.out.println(" big != small + 1 : big ++ , small ++ ");
 								partetionCodeFlag = 0;
 								partetionSwapFalg = 1;
 								currentDownCount = 0;
@@ -1425,7 +1531,6 @@ public class SortingFunctions extends MyPanel
 							currentDownCount += YCHANGE;
 							if (currentDownCount >= DOWN)
 							{
-								System.out.println(" Partetion Swap down done ");
 								int excess = currentDownCount - DOWN;
 								box.addOffsetRectangle(big, 0, -excess);
 								box.addOffsetRectangle(small + 1, 0, -excess);
@@ -1491,20 +1596,18 @@ public class SortingFunctions extends MyPanel
 					}
 				}
 				
+				// replacing the pivot at its correct position
 				else if (partetionEnd == 1)
 				{
 					
 					if (downFlag == 1)
 					{
-						// TODO check if the left has not been changed
-						
 						box.addOffsetRectangle(left, 0, YCHANGE);
 						box.addOffsetRectangle(small, 0, YCHANGE);
 						paintBox();
 						currentDownCount += YCHANGE;
 						if (currentDownCount >= DOWN)
 						{
-							System.out.println("left : " + left + " small " + (small));
 							int excess = currentDownCount - DOWN;
 							box.addOffsetRectangle(left, 0, -excess);
 							box.addOffsetRectangle(small, 0, -excess);
@@ -1515,7 +1618,7 @@ public class SortingFunctions extends MyPanel
 						}
 					}
 					
-					// shifting the next block to left
+					// shifting the next block to left and pivot to right
 					else if (leftFlag == 1)
 					{
 						box.addOffsetRectangle(left, XCHANGE, 0);
@@ -1535,7 +1638,7 @@ public class SortingFunctions extends MyPanel
 						}
 					}
 					
-					// moving the next block up
+					// moving the pivot up
 					else if (upFlag == 1)
 					{
 						box.addOffsetRectangle(small, 0, -YCHANGE);
@@ -1554,7 +1657,6 @@ public class SortingFunctions extends MyPanel
 							Rectangle currRect = box.getRectangle(small);
 							Rectangle nextRect = box.getRectangle(left);
 							
-							//TODO check this left and right 
 							box.setRectangle(currRect, left);
 							box.setRectangle(nextRect, small);
 							
@@ -1597,7 +1699,6 @@ public class SortingFunctions extends MyPanel
 		};
 		
 		timer.addActionListener(action);
-		
 		return timer;
 	}
 }
