@@ -5,6 +5,21 @@
  *				Ujjawal Soni (CS13B053)
  */
 
+/**
+ *	HomePage- Class for the first page, opens the option buttons, 
+ *	to open whichever algorithm or data-structure user want.
+ *	Gives following options:
+ *	-->	Bubble Sort
+ *	-->	Selection Sort
+ *	-->	Insertion Sort
+ *	-->	Merge Sort
+ *	-->	Quick Sort
+ *	-->	Binary Search Tree
+ *	-->	Binary Heap
+ *
+ *	Opens the algorithm animation window on button click, GUI class.
+ */
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -24,22 +39,36 @@ import javax.swing.WindowConstants;
 
 public class HomePage
 {
-	private JFrame mainFrame;
-	private Container mainPane;
-	private JPanel centrePanel;
-	private JPanel leftPanel;
-	private JPanel rightPanel;
-	private JPanel topPanel;
-	private JPanel bottomPanel;
+	/**
+	 * mainFrame - the main frame of the gui
+	 * the mainPane (container) is divided into 5 jpanels
+	 * ** centre
+	 * ** left
+	 * ** right
+	 * ** top
+	 * ** bottom
+	 * 
+	 * the centre panel contain the buttons for all the algos.
+	 */
+	private JFrame 		mainFrame;
+	private Container 	mainPane;
+	private JPanel 		centrePanel;
+	private JPanel 		leftPanel;
+	private JPanel 		rightPanel;
+	private JPanel 		topPanel;
+	private JPanel 		bottomPanel;
 	
-	private JButton bubbleSort;
-	private JButton selectionSort;
-	private JButton insertionSort;
-	private JButton mergeSort;
-	private JButton quickSort;
-	private JButton binarySearchTree;
-	private JButton binaryHeap;
-	
+	/**
+	 *	Buttons for the algorithms/data-structures
+	 */
+	private JButton 	bubbleSort;
+	private JButton 	selectionSort;
+	private JButton 	insertionSort;
+	private JButton 	mergeSort;
+	private JButton 	quickSort;
+	private JButton 	binarySearchTree;
+	private JButton 	binaryHeap;
+
 	GUI g;
 
 	public HomePage ()
@@ -47,17 +76,27 @@ public class HomePage
 		mainFrame = new JFrame ("Algorithm Theatre");
 		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+		/**
+		 *	Open the main frame in full screen size.
+		 */
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();		
 		mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		mainFrame.setSize(screenSize);
 	    mainPane = mainFrame.getContentPane();
 
+	    /**
+		 *	centre panel has grid-layout and contains all the buttons.
+	     */
 	    centrePanel = new JPanel ();
 	    centrePanel.setPreferredSize(new Dimension(920, 720));
 	    centrePanel.setBackground(Color.white);
 	    centrePanel.setLayout(new GridLayout(2,4,20,30));
 		mainPane.add(centrePanel, BorderLayout.CENTER);
 
+		/**
+		 *	Top-panel, bottom-panel, right-panel, left-panel are all just 
+		 *	for good look, and dont contain any special feature.
+		 */
 	    leftPanel = new JPanel ();
 	    leftPanel.setPreferredSize(new Dimension(40, 720));
 	    leftPanel.setBackground(Color.black);
@@ -81,11 +120,10 @@ public class HomePage
 	    bottomPanel.setBackground(Color.black);
 		mainPane.add(bottomPanel, BorderLayout.PAGE_END);
 
+		/**
+		 *	Button for opening the GUI window for bubble sort
+		 */
 		bubbleSort = new JButton("Bubble Sort");
-//		bubbleSort = new JButton ("Bubble Sort", new ImageIcon ("Images/bubblesort.jpg"));
-//		bubbleSort.setIcon(new ImageIcon ("Images/bubblesort.jpg"));
-//		bubbleSort.setHorizontalTextPosition(AbstractButton.LEFT);
-//		bubbleSort.setVerticalTextPosition(AbstractButton.TOP);
 		bubbleSort.setBorder(null);
 		bubbleSort.setFocusPainted(false);
 		bubbleSort.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -97,6 +135,10 @@ public class HomePage
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				/**
+				 *	GUI window is opened, and its
+				 *	bubbleSortWindowInitialize() function is called.
+				 */
 				g = new GUI(true);
 				g.bubbleSortWindowInitialize();
 			}
@@ -111,7 +153,9 @@ public class HomePage
 
 		});
 
-
+		/**
+		 *	Button for opening the GUI window for selection sort
+		 */
 		selectionSort = new JButton("Selection Sort");
 		selectionSort.setBorder(null);
 		selectionSort.setFocusPainted(false);
@@ -124,6 +168,10 @@ public class HomePage
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				/**
+				 *	GUI window is opened, and its
+				 *	selectionSortWindowInitialize() function is called.
+				 */
 				g = new GUI(true);
 				g.selectionSortWindowInitialize();
 			}
@@ -139,6 +187,9 @@ public class HomePage
 		});
 
 		
+		/**
+		 *	Button for opening the GUI window for insertion sort
+		 */
 		insertionSort = new JButton("Insertion Sort");
 		insertionSort.setBorder(null);
 		insertionSort.setFocusPainted(false);
@@ -151,6 +202,10 @@ public class HomePage
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				/**
+				 *	GUI window is opened, and its
+				 *	insertionSortWindowInitialize() function is called.
+				 */
 				g = new GUI(true);
 				g.insertionSortWindowInitialize();
 			}
@@ -166,6 +221,9 @@ public class HomePage
 		});
 
 
+		/**
+		 *	Button for opening the GUI window for merge sort
+		 */
 		mergeSort = new JButton("Merge Sort");
 		mergeSort.setBorder(null);
 		mergeSort.setFocusPainted(false);
@@ -178,6 +236,10 @@ public class HomePage
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				/**
+				 *	GUI window is opened, and its
+				 *	mergeSortWindowInitialize() function is called.
+				 */
 				g = new GUI(true);
 				g.mergeSortWindowInitialize();
 			}
@@ -193,6 +255,9 @@ public class HomePage
 		});
 
 
+		/**
+		 *	Button for opening the GUI window for quick sort
+		 */
 		quickSort = new JButton("Quick Sort");
 		quickSort.setBorder(null);
 		quickSort.setFocusPainted(false);
@@ -205,6 +270,10 @@ public class HomePage
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				/**
+				 *	GUI window is opened, and its
+				 *	quickSortWindowInitialize() function is called.
+				 */
 				g = new GUI(true);
 				g.quickSortWindowInitialize();
 			}
@@ -220,6 +289,9 @@ public class HomePage
 		});
 
 
+		/**
+		 *	Button for opening the GUI window for binary search tree
+		 */
 		binarySearchTree = new JButton("<html>Binary Search<br><center>Tree</center></html>");
 		binarySearchTree.setBorder(null);
 		binarySearchTree.setFocusPainted(false);
@@ -232,6 +304,10 @@ public class HomePage
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				/**
+				 *	GUI window is opened, and its
+				 *	bianrySearchTreeWindowInitialize() function is called.
+				 */
 				g = new GUI(true);
 				g.binarySearchTreeWindowInitialize();
 			}
@@ -247,6 +323,9 @@ public class HomePage
 		});
 
 
+		/**
+		 *	Button for opening the GUI window for binary heap
+		 */
 		binaryHeap = new JButton("Binary Heap");
 		binaryHeap.setBorder(null);
 		binaryHeap.setFocusPainted(false);
@@ -259,6 +338,10 @@ public class HomePage
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				/**
+				 *	GUI window is opened, and its
+				 *	binaryHeapWindowInitialize() function is called.
+				 */
 				g = new GUI(true);
 				g.binaryHeapWindowInitialize();
 			}

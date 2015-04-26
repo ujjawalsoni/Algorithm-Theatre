@@ -50,55 +50,117 @@ public class GUI
 	 * ** mainBottomPanel contains the labels and gui for various operations
 	 */
 
-	private JFrame mainFrame;
-	private Container mainPane;
+	private JFrame 		mainFrame;
+	private Container 	mainPane;
 
-	private JPanel centrePanel;
-	private JPanel leftPanel;
-	private JPanel rightPanel;
-	private JPanel topPanel;
-	private JPanel bottomPanel;
+	private JPanel 		centrePanel;
+	private JPanel 		leftPanel;
+	private JPanel 		rightPanel;
+	private JPanel 		topPanel;
+	private JPanel 		bottomPanel;
 
-	private JButton leftBottom;
-	private JButton rightMiddle;
-	private JButton rightBottom;
-	private JButton developers;
+	private JButton 	leftBottom;
+	private JButton 	rightMiddle;
+	private JButton 	rightBottom;
+	private JButton 	developers;
 
-	private JPanel mainTopPanel;
-	private JPanel mainBottomPanel;
-	private JPanel codeTracePanel;
-	private JLabel[] ctl;
-	private JLabel statusLabel;
+	/**
+	 *	centre panel contains two panels mainTopPanel and mainBottomPanel
+	 *	
+	 *	mainTopPanel contains the animation panel corresponding to the function called.
+	 *	mainBottomPanel contains 
+	 *	-->	the codeTracePanel, which contains
+	 *		JLabel array, which contains the pseudocodes of the corresponding operation.
+	 *	-->	the statusLabel, shows the status of the operation being performed.
+	 */
+	private JPanel 		mainTopPanel;
+	private JPanel 		mainBottomPanel;
+	private JPanel 		codeTracePanel;
+	private JLabel[] 	codeTraceLabels;
+	private JLabel 		statusLabel;
 
-	private JButton createList;
-	private JTextField userInputField;
-	private JButton goCreateList;
+	/**
+	 *	createList - a JButton to take user input
+	 *	userInputField - a Textfield to take the input list from user
+	 *	input is read from the TextField when goCreateList button is clicked
+	 */
+	private JButton 	createList;
+	private JTextField 	userInputField;
+	private JButton 	goCreateList;
 
-	private JButton sortList;
-	private JButton goSortList;
+	/**
+	 *	sortList - a JButton to set goSortList button visible
+	 *	when goSortButton is clicked, if the current instruction is sorting
+	 *	the it starts its animation.
+	 *	But for binarySearchTree- it is used as button to call 
+	 *		search element function
+	 *	and for binaryHeap- it is used to call deleteMin function.
+	 */
+	private JButton 	sortList;
+	private JButton 	goSortList;
 
-	private JTextField searchField;
+	/**
+	 *	text field to get the element to be searched.
+	 */
+	private JTextField 	searchField;
 	
-	private JButton insertElement;
-	private JTextField insertField;
-	private JButton goInsertElement;
+	/**
+	 *	insertElement button sets the insertField and goInsertElement visible.
+	 *	so when goInsertElement is clicked, the input element
+	 *	to be inserted in the binarySearchTree or binaryHeap is read 
+	 *	from the JTextField - insertField.
+	 */
+	private JButton 	insertElement;
+	private JTextField 	insertField;
+	private JButton 	goInsertElement;
 
-	private JButton deleteElement;
-	private JTextField deleteField;
-	private JButton goDeleteElement;
+	/**
+	 *	deleteElement button sets the deleteField and goDeleteElement visible.
+	 *	so when goDeleteElement is clicked, the input element
+	 *	to be deleted in the binarySearchTree is read from deleteField.
+	 */
+	private JButton 	deleteElement;
+	private JTextField 	deleteField;
+	private JButton 	goDeleteElement;
 
-	private JButton back;
-	private JButton currentAlgo;
+	/**
+	 *	JButton to go back to homePage.
+	 */
+	private JButton		back;
 
-	private ImageIcon rightBlackArrow;
-	private ImageIcon leftBlackArrow;
-	
-	protected BSTPanel bstPanel;
-	protected BHPanel bhPanel;
+	/**
+	 *	JButton to play/pause the animation.
+	 */
+	private JButton 	pause;
 
-	int instruction;
-	Timer globalTimer;
+	/**
+	 *	JButton to see the details of current algorithm/data-structure
+	 *	being implemented.
+	 */
+	private JButton 	currentAlgo;
 
+	/**
+	 *	images of the right/left arrows on the buttons in right/left panels.
+	 */
+	private ImageIcon 	rightBlackArrow;
+	private ImageIcon 	leftBlackArrow;
+
+	protected BSTPanel 	bstPanel;
+	protected BHPanel 	bhPanel;
+
+	/**
+	 *	int flag to keep track of the current algorithm/data-structure globally.
+	 */
+	int 	instruction;
+
+	/**
+	 *	global timer of the running animation.
+	 */
+	Timer 	globalTimer;
+
+	/**
+	 *	Constructor to call the GUI initialize function from the homePage.
+	 */
 	public GUI (boolean v)
 	{
 		initialize();
@@ -116,7 +178,6 @@ public class GUI
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();		
 		mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		mainFrame.setSize(screenSize);
-//	    mainFrame.setResizable(false);
 
 	    mainPane = mainFrame.getContentPane();
 	    centrePanel = new JPanel ();
@@ -156,10 +217,12 @@ public class GUI
 		leftBottom.setFocusPainted(false);
 		leftBottom.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.anchor = GridBagConstraints.PAGE_END;
-		gbc.gridx = 0;	gbc.gridy = 0;	gbc.weighty=1.0;
-		gbc.insets = new Insets(0,0,1,0);
+		gbc.fill 	= GridBagConstraints.HORIZONTAL;
+		gbc.anchor 	= GridBagConstraints.PAGE_END;
+		gbc.gridx 	= 0;
+		gbc.gridy 	= 0;
+		gbc.weighty	= 1.0;
+		gbc.insets 	= new Insets(0,0,1,0);
 		leftPanel.add (leftBottom, gbc);
 
 		leftBottom.addMouseListener(new MouseListener()
@@ -212,10 +275,12 @@ public class GUI
 		rightMiddle.setFocusPainted(false);
 		rightMiddle.setBorder(null);
 		rightMiddle.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.anchor = GridBagConstraints.CENTER;
-		gbc.gridx = 0;	gbc.gridy = 0;	gbc.weighty=0.5;
-		gbc.insets = new Insets(424,0,0,0);
+		gbc.fill 	= GridBagConstraints.HORIZONTAL;
+		gbc.anchor 	= GridBagConstraints.CENTER;
+		gbc.gridx 	= 0;
+		gbc.gridy 	= 0;
+		gbc.weighty	= 0.5;
+		gbc.insets 	= new Insets(424,0,0,0);
 		rightPanel.add (rightMiddle, gbc);
 
 		rightMiddle.addMouseListener(new MouseListener()
@@ -251,10 +316,12 @@ public class GUI
 		rightBottom.setFocusPainted(false);
 		rightBottom.setBorder(null);
 		rightBottom.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.anchor = GridBagConstraints.PAGE_END;
-		gbc.gridx = 0;	gbc.gridy = 1;	gbc.weighty=1.0;
-		gbc.insets = new Insets(0,0,1,0);
+		gbc.fill 	= GridBagConstraints.HORIZONTAL;
+		gbc.anchor 	= GridBagConstraints.PAGE_END;
+		gbc.gridx 	= 0;
+		gbc.gridy 	= 1;
+		gbc.weighty	= 1.0;
+		gbc.insets	= new Insets(0,0,1,0);
 		rightPanel.add (rightBottom, gbc);
 
 		rightBottom.addMouseListener(new MouseListener()
@@ -288,10 +355,12 @@ public class GUI
 		mainTopPanel.setBackground(Color.white);
 		mainTopPanel.setPreferredSize(new Dimension(1213,420));
 		mainTopPanel.setLayout(null);
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.anchor = GridBagConstraints.PAGE_START;
-		gbc.gridx=0;	gbc.gridy=0;	gbc.weightx=0.0;
-		gbc.insets = new Insets(0,0,0,0);
+		gbc.fill 	= GridBagConstraints.HORIZONTAL;
+		gbc.anchor 	= GridBagConstraints.PAGE_START;
+		gbc.gridx	= 0;
+		gbc.gridy 	= 0;
+		gbc.weightx	= 0.0;
+		gbc.insets 	= new Insets(0,0,0,0);
 		centrePanel.add (mainTopPanel, gbc);
 
 		mainBottomPanel = new JPanel();
@@ -299,10 +368,11 @@ public class GUI
 		mainBottomPanel.setBackground(Color.white);
 		mainBottomPanel.setPreferredSize(new Dimension(1213,239));
 		mainBottomPanel.setLayout(null);
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.anchor = GridBagConstraints.PAGE_START;
-		gbc.gridx=0;	gbc.gridy=0;
-		gbc.insets = new Insets(424,0,0,0);
+		gbc.fill 	= GridBagConstraints.HORIZONTAL;
+		gbc.anchor 	= GridBagConstraints.PAGE_START;
+		gbc.gridx	= 0;
+		gbc.gridy 	= 0;
+		gbc.insets 	= new Insets(424,0,0,0);
 		centrePanel.add (mainBottomPanel, gbc);
 
 		statusLabel = new JLabel();
@@ -320,11 +390,11 @@ public class GUI
 		codeTracePanel.setLayout(new GridLayout(7,1));
 		mainBottomPanel.add (codeTracePanel);
 
-		ctl = new JLabel[7];
+		codeTraceLabels = new JLabel[7];
 		for (int i=0; i<7; i++)
 		{
-			ctl[i] = new JLabel();
-			codeTracePanel.add(ctl[i]);
+			codeTraceLabels[i] = new JLabel();
+			codeTracePanel.add(codeTraceLabels[i]);
 		}
 
 		createList = new JButton(" Create");
@@ -793,6 +863,49 @@ public class GUI
 		bottomPanel.add (developers, gbc);
 		developers.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
+
+		/**
+		 *	JButton to pause the animation timer
+		 */
+		pause = new JButton (new ImageIcon("Images/pause.jpg"));
+		pause.setBorder(null);
+		pause.setFocusPainted(false);
+		pause.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		pause.setBackground(Color.black);
+		pause.setForeground(Color.white);
+		pause.setPreferredSize(new Dimension(40,40));
+		pause.setBounds(585,190,40,40);
+		mainBottomPanel.add(pause);
+
+		pause.addMouseListener(new MouseListener()
+		{
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (globalTimer.isRunning())
+				{
+					globalTimer.stop();
+					pause.setIcon(new ImageIcon("Images/play.jpg"));
+				}
+				else
+				{
+					globalTimer.start();
+					pause.setIcon(new ImageIcon("Images/pause.jpg"));
+				}
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+
+		});
+
+		/**
+		 *	JButton to go back to homePage
+		 */
 		back = new JButton (new ImageIcon("Images/back.png"));
 		back.setBorder(null);
 		back.setFocusPainted(false);
@@ -835,6 +948,10 @@ public class GUI
 	}
 
 	
+	/**
+	 *	read the input from the input JTextField and convert 
+	 *	to ArrayList and return.
+	 */
 	public ArrayList<Integer> getInputList (JTextField inputField)
 	{
 		String userInputString = inputField.getText();
@@ -851,13 +968,15 @@ public class GUI
 	{
 		statusLabel.setText(convertToMultiline(content));
 	}
-	
+
+	/**
+	 *	Set the pseudocode in the JLabel array of the codeTracePanel.
+	 */
 	public void setCodeTraceLabel (String content)
 	{
 		String lines[] = content.split("\\r?\\n");
 		for (int i=0; i<lines.length; i++)
-			ctl[i].setText(lines[i]);
-//		codeTracePanel.setText(convertToMultiline(content));
+			codeTraceLabels[i].setText(lines[i]);
 	}
 
 	private static String convertToMultiline(String original)
@@ -870,6 +989,13 @@ public class GUI
 		mainFrame.setVisible(v);
 	}
 
+
+	/**
+	 *	bubbleSortWindowInitialize() create the object of the 
+	 *	SortingFunction class, and intialize array to be sorted
+	 *	set the pseudocode for bubble sort in the CodeTracePanel
+	 *	then call the bubbleSort() function of SortingFunction.
+	 */
 	public void bubbleSortWindowInitialize()
 	{
 		instruction = 0;
@@ -895,10 +1021,21 @@ public class GUI
 		p.setBackground(Color.white);
 		p.setVisible (true);
 		p.setBounds(0,0,1213,420);
+
+		/**
+		 *	add the SortingFunction panel object to the mainTopPanel.
+		 */
 		mainTopPanel.add (p);
 		globalTimer = p.bubbleSort();
 	}
 	
+
+	/**
+	 *	selectionSortWindowInitialize() create the object of the 
+	 *	SortingFunction class, and intialize array to be sorted
+	 *	set the pseudocode for selection sort in the CodeTracePanel
+	 *	then call the selectionSort() function of SortingFunction.
+	 */
 	public void selectionSortWindowInitialize()
 	{
 		instruction = 1;
@@ -927,6 +1064,13 @@ public class GUI
 		globalTimer = p.selectionSort();
 	}
 	
+
+	/**
+	 *	insertionSortWindowInitialize() create the object of the 
+	 *	SortingFunction class, and intialize array to be sorted
+	 *	set the pseudocode for insertion sort in the CodeTracePanel
+	 *	then call the insertionSort() function of SortingFunction.
+	 */
 	public void insertionSortWindowInitialize()
 	{
 		instruction = 2;
@@ -956,6 +1100,13 @@ public class GUI
 		globalTimer = p.insertionSort();
 	}
 	
+
+	/**
+	 *	mergeSortWindowInitialize() create the object of the 
+	 *	SortingFunction class, and intialize array to be sorted
+	 *	set the pseudocode for merge sort in the CodeTracePanel
+	 *	then call the mergeSort() function of SortingFunction.
+	 */
 	public void mergeSortWindowInitialize()
 	{
 		instruction = 3;
@@ -964,7 +1115,7 @@ public class GUI
 		String pseudoCode = new StringBuilder()
 							.append("  split each element into partitions of size 1\n")
 							.append("  recursively merge adjacent partitions\n")
-							.append("     for i = leftPartStartIndex to rightPartLastIndex inclusive\n")
+							.append("     for i = leftStartIndex to rightLastIndex inclusive\n")
 							.append("        if leftPartHeadValue <= rightPartHeadValue\n")
 							.append("           copy leftPartHeadValue\n")
 							.append("        else: copy rightPartHeadValue\n")
@@ -985,6 +1136,13 @@ public class GUI
 		globalTimer = p.mergeSort();
 	}
 	
+
+	/**
+	 *	quickSortWindowInitialize() create the object of the 
+	 *	SortingFunction class, and intialize array to be sorted
+	 *	set the pseudocode for quick sort in the CodeTracePanel
+	 *	then call the quickSort() function of SortingFunction.
+	 */
 	public void quickSortWindowInitialize()
 	{
 		instruction = 4;
@@ -1014,6 +1172,11 @@ public class GUI
 		globalTimer = p.quickSort();
 	}
 
+
+	/**
+	 *	binarySearchTreeWindowInitialize() create the object of the 
+	 *	BSTPanel class, and intialize the binary search tree.
+	 */
 	public void binarySearchTreeWindowInitialize()
 	{
 		instruction = 5;
@@ -1031,9 +1194,18 @@ public class GUI
 		bstPanel.setBackground(Color.white);
 		bstPanel.setVisible (true);
 		bstPanel.setBounds(0,0,1213,420);
+
+		/**
+		 *	add the BSTPanel object to the mainTopPanel.
+		 */
 		mainTopPanel.add (bstPanel);
 	}
 	
+
+	/**
+	 *	binaryHeapWindowInitialize() create the object of the 
+	 *	BHPanel class, and intialize the binary heap.
+	 */
 	public void binaryHeapWindowInitialize()
 	{
 		instruction = 6;
@@ -1055,6 +1227,10 @@ public class GUI
 		bhPanel.setBackground(Color.white);
 		bhPanel.setVisible (true);
 		bhPanel.setBounds(0,0,1213,420);
+
+		/**
+		 *	add the BHPanel object to the mainTopPanel.
+		 */
 		mainTopPanel.add (bhPanel);
 	}
 

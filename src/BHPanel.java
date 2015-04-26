@@ -14,25 +14,30 @@ import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+
 public class BHPanel extends JPanel implements ActionListener
 {
 	private static final long serialVersionUID = 1L;
 	BinaryHeap bh;
 	private static final int TIMER_SPEED = 800;
 
-		
+
 	public BHPanel(BinaryHeap b)
 	{
 		bh = b;
 	}
 
+	/**
+	 *	Insert an element into the binary heap 
+	 *	and return the timer of the animation
+	 */
 	public Timer insert (final int val)
 	{
 		final Timer timer = new Timer(TIMER_SPEED, this);
 		
 		ActionListener action = new ActionListener()
 		{
-			Node temp = bh.heapSize > 0 ? bh.binaryHeap.get((bh.heapSize-1)/2) : null;
+			Node 	temp = bh.heapSize > 0 ? bh.binaryHeap.get((bh.heapSize-1)/2) : null;
 			boolean flag;
 			boolean inserted;
 			boolean finish;
@@ -113,7 +118,6 @@ public class BHPanel extends JPanel implements ActionListener
 				{
 					unColorPath(bh.binaryHeap.get(bh.heapSize-1));
 					timer.stop();
-//					bh.print();
 				}
 				
 				paintBox();
@@ -125,13 +129,18 @@ public class BHPanel extends JPanel implements ActionListener
 		return timer;
 	}
 
+
+	/**
+	 *	Delete the minimum element of the binary heap 
+	 *	and return the timer of the animation
+	 */
 	public Timer deleteMin ()
 	{
 		final Timer timer = new Timer(TIMER_SPEED, this);
 
 		ActionListener action = new ActionListener()
 		{
-			Node temp = bh.heapSize > 0 ? bh.binaryHeap.get(0) : null;
+			Node 	temp = bh.heapSize > 0 ? bh.binaryHeap.get(0) : null;
 			boolean flag;
 			boolean swapped;
 			boolean remove;
@@ -159,7 +168,6 @@ public class BHPanel extends JPanel implements ActionListener
 					else
 					{
 						swap (temp, bh.binaryHeap.get(bh.heapSize-1), timer);
-//						bh.swap (temp, bh.binaryHeap.get(bh.heapSize-1));
 						flag = !flag;
 						swapped = true;
 						timer.stop();
@@ -271,6 +279,12 @@ public class BHPanel extends JPanel implements ActionListener
 		return timer;
 	}
 	
+
+	/**
+	 *	Swap two nodes in the binary heap
+	 *	required during insert and delete-min, 
+	 *	when swaping a node with its parent
+	 */
 	public void swap (final Node n1, final Node n2, final Timer timer)
 	{
 		final int x1 = n1.x;

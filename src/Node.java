@@ -17,31 +17,38 @@ import java.awt.geom.Line2D;
 
 public class Node
 {
-	int data;
-	int x;
-	int y;
-	Node parent;
-	Node leftChild;
-	Node rightChild;
-	Color nodeColor;
-	Color nodeBGColor;
-	Color edgeColor;
-	Color textColor;
-	int height;
+	/**
+	 *	A Node object stores its data, its x and y - coordinates
+	 *	its parent, left child, right child
+	 *	Node color, node background color, node text color,
+	 *	edge color (color of edge from node to its parent),
+	 *	and its height in the tree.
+	 */
+	int 	data;
+	int 	x;
+	int 	y;
+	Node 	parent;
+	Node 	leftChild;
+	Node 	rightChild;
+	Color 	nodeColor;
+	Color 	nodeBGColor;
+	Color 	edgeColor;
+	Color 	textColor;
+	int 	height;
 
 	public Node (int d, Node p, int x, int y, int h)
 	{
-		data = d;
-		this.x = x;
-		this.y = y;
-		parent = p;
-		leftChild = null;
-		rightChild = null;
-		nodeColor = Color.black;
-		nodeBGColor = Color.white;
-		edgeColor = Color.black;
-		textColor = Color.black;
-		height = h;
+		data 			= d;
+		this.x 			= x;
+		this.y 			= y;
+		parent 			= p;
+		leftChild 		= null;
+		rightChild 		= null;
+		nodeColor 		= Color.black;
+		nodeBGColor 	= Color.white;
+		edgeColor 		= Color.black;
+		textColor 		= Color.black;
+		height 			= h;
 	}
 	
 	public void printNodeDetails ()
@@ -56,6 +63,9 @@ public class Node
 		System.out.println();
 	}
 
+	/**
+	 *	Draw a node.
+	 */
 	public void drawNode (Graphics g)
 	{
 		Graphics2D g2 = (Graphics2D) g;
@@ -75,10 +85,11 @@ public class Node
 		if (parent != null)
 		{
 			double temp = Math.atan2(y-parent.y, x-parent.x);
-			double x1 = (x+16) - 16*Math.cos(temp);
-			double y1 = (y+16) - 16*Math.sin(temp);
-			double x2 = (parent.x+16) + 16*Math.cos(temp);
-			double y2 = (parent.y+16) + 16*Math.sin(temp);
+			double x1 	= (x+16) - 16*Math.cos(temp);
+			double y1 	= (y+16) - 16*Math.sin(temp);
+			double x2 	= (parent.x+16) + 16*Math.cos(temp);
+			double y2 	= (parent.y+16) + 16*Math.sin(temp);
+
 			g2.draw (new Line2D.Double(x1, y1, x2, y2));
 		}
 		g2.setStroke(oldStroke);

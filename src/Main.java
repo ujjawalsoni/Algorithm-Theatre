@@ -10,6 +10,9 @@ public class Main
 {
 	public static void main(String[] args)
 	{
+		/**
+		 *	Call the HomePage.
+		 */
 		new HomePage();
 	}
 }

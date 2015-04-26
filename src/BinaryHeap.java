@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class BinaryHeap 
 {
-	int heapSize;
+	int 			heapSize;
 	ArrayList<Node> binaryHeap;
 
 	public BinaryHeap ()
@@ -69,7 +69,10 @@ public class BinaryHeap
 		n1.data = n2.data;
 		n2.data = temp;
 	}
-	
+
+	/**
+	 *	Draw the binary heap, by iteratively drawing all its nodes.
+	 */
 	public void drawTree(Graphics g)
 	{
 		if (heapSize == 0)

@@ -28,14 +28,19 @@ class BSTPanel extends JPanel implements ActionListener
 	{
 		bst = b;
 	}
-	
+
+	/**
+	 *	Search an element in the binary search tree
+	 *	and return the timer of the animation, so as to
+	 *	start and stop whenever required
+	 */
 	public Timer search (final int val)
 	{
 		final Timer timer = new Timer(TIMER_SPEED, this);
 		
 		ActionListener action = new ActionListener()
 		{
-			Node temp = bst.root;
+			Node 	temp = bst.root;
 			boolean flag;
 			boolean finish;
 			
@@ -82,13 +87,18 @@ class BSTPanel extends JPanel implements ActionListener
 		return timer;
 	}
 	
+
+	/**
+	 *	Insert an element in the binary search tree
+	 *	and return the timer of the animation
+	 */
 	public Timer insert (final int val)
 	{
 		final Timer timer = new Timer(TIMER_SPEED, this);
 		
 		ActionListener action = new ActionListener()
 		{
-			Node temp = bst.root;
+			Node 	temp = bst.root;
 			boolean flag;
 			boolean finish;
 			
@@ -173,15 +183,20 @@ class BSTPanel extends JPanel implements ActionListener
 		return timer;
 	}
 
+
+	/**
+	 *	Delete an element in the binary search tree
+	 *	and return the timer of the animation
+	 */
 	public Timer delete (final int val)
 	{
 		final Timer timer = new Timer(TIMER_SPEED, this);
 		
 		ActionListener action = new ActionListener()
 		{
-			Node temp = bst.root;
-			Node successor;
-			Node parentSuccessor;
+			Node 	temp = bst.root;
+			Node 	successor;
+			Node 	parentSuccessor;
 			boolean flag;
 			boolean searched;
 			boolean finish;
@@ -352,6 +367,11 @@ class BSTPanel extends JPanel implements ActionListener
 		System.out.println();
 	}
 	
+
+	/**
+	 *	update the coordinates of all the nodes below given node
+	 *	(required while deleting a node with children)
+	 */
 	private void updateAllNodes (Node node)
 	{
 		Queue<Node> queue = new LinkedList<Node>();

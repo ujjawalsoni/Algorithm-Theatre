@@ -14,8 +14,8 @@ import java.util.Queue;
 
 public class BinarySearchTree
 {
-	Node root;
-	Node parent = null;
+	Node 	root;
+	Node 	parent = null;
 
 	public BinarySearchTree ()
 	{
@@ -63,6 +63,9 @@ public class BinarySearchTree
 		return node;
 	}
 
+	/**
+	 *	Draw the binary search tree, by iteratively drawing all its nodes.
+	 */
 	public void drawTree(Graphics g)
 	{
 		if (root == null)
