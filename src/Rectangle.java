@@ -8,6 +8,7 @@
 
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 
@@ -31,6 +32,7 @@ class Rectangle
 	private int height;
 	private int data;
 	private Color color;
+	private final int TEXT_GAP = 4;
 	
 	/**************** constructors ***********************/
 	
@@ -155,6 +157,8 @@ class Rectangle
 		g.fillRect(x, y, width, height);
 		g.setColor(Color.BLACK);
 		g.drawRect(x, y, width, height);
+		g.setFont(new Font("Roman", Font.BOLD, 12));
+		g.drawString(""+this.data, x+width/4, y-TEXT_GAP);
 		Toolkit.getDefaultToolkit().sync();
 	}
 }

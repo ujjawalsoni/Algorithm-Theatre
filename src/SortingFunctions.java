@@ -846,6 +846,12 @@ public class SortingFunctions extends MyPanel
 						mergeSortDelayFlag1 = 1;
 						mergeSortdelay1 = 0;
 						mergeSortCodeFlag = 0;
+						if(mid >= rightEnd)
+						{
+							leftStart += 2 * currentSize;
+							mergeSortDelayFlag1 = 0;
+							mergeSortCodeFlag = 1;
+						}
 					}
 				}
 				else if (mergeSortDelayFlag1 == 1)
@@ -856,7 +862,6 @@ public class SortingFunctions extends MyPanel
 						l = leftStart;
 						m = mid;
 						r = rightEnd;
-						//mergeSortCodeFlag = 1;
 						mergeSortDelayFlag1 = 0;
 						mergeInitializeFlag = 1;
 						leftStart += 2 * currentSize;
